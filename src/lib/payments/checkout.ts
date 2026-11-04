@@ -1,7 +1,7 @@
 import 'server-only';
 import { z } from 'zod';
 import { createAdminClient, type AdminClient } from '@/lib/db/server';
-import { mercadoPagoEnv } from '@/lib/env';
+import { appUrl } from '@/lib/env';
 import { createOrder, type CreatedOrder, type FetchLike } from './mercadopago/api';
 
 export class PaymentError extends Error {
@@ -31,7 +31,6 @@ export async function createCardCheckout(
 ): Promise<CreatedOrder> {
   const id = z.uuid().parse(enrollmentId);
   const client = deps.client ?? createAdminClient();
-  const { APP_URL } = mercadoPagoEnv();
 
   const { data: enrollment, error } = await client
     .from('enrollments')
@@ -65,7 +64,7 @@ export async function createCardCheckout(
     }
   }
 
-  const base = APP_URL.replace(/\/$/, '');
+  const base = appUrl().replace(/\/$/, '');
   const result = (outcome: string) => `${base}/reserva/resultado?inscripcion=${id}&estado=${outcome}`;
 
   return createOrder(

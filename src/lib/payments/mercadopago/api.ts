@@ -1,5 +1,5 @@
 import 'server-only';
-import { mercadoPagoEnv } from '@/lib/env';
+import { mercadoPagoAccessToken } from '@/lib/env';
 
 const API = 'https://api.mercadopago.com';
 
@@ -56,12 +56,11 @@ export class MercadoPagoApiError extends Error {
 }
 
 async function call(path: string, init: RequestInit, fetchFn: FetchLike) {
-  const { MP_ACCESS_TOKEN } = mercadoPagoEnv();
   const res = await fetchFn(`${API}${path}`, {
     ...init,
     headers: {
       accept: 'application/json',
-      Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${mercadoPagoAccessToken()}`,
       'Content-Type': 'application/json',
       ...init.headers,
     },

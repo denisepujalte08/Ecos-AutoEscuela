@@ -1,7 +1,8 @@
 import { fileURLToPath } from 'node:url';
+import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -11,5 +12,8 @@ export default defineConfig({
   },
   test: {
     include: ['src/**/*.test.ts'],
+    // Carga .env.local para las pruebas contra servicios reales (*.live.test.ts).
+    // Los tests unitarios fijan sus propias variables con vi.stubEnv.
+    env: loadEnv(mode, process.cwd(), ''),
   },
-});
+}));

@@ -1,7 +1,7 @@
 import 'server-only';
 import { z } from 'zod';
 import { createAdminClient, type AdminClient } from '@/lib/db/server';
-import { mercadoPagoEnv } from '@/lib/env';
+import { mercadoPagoWebhookSecret } from '@/lib/env';
 import { getOrder, MercadoPagoApiError, type FetchLike } from './api';
 import { verifyMercadoPagoSignature } from './signature';
 
@@ -28,7 +28,7 @@ export async function processMercadoPagoWebhook(request: Request, deps: Deps = {
   const url = new URL(request.url);
   const dataId = url.searchParams.get('data.id');
 
-  const secret = deps.secret ?? mercadoPagoEnv().MP_WEBHOOK_SECRET;
+  const secret = deps.secret ?? mercadoPagoWebhookSecret();
   const valid = verifyMercadoPagoSignature({
     secret,
     signatureHeader: request.headers.get('x-signature'),
