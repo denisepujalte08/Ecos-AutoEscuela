@@ -13,6 +13,8 @@
 
 - [x] Cliente de Supabase del lado servidor, tipos generados y módulos `booking` (turnos libres, reserva, sugerencias) con 16 tests unitarios.
 
+- [x] Pagos con Mercado Pago (backend): `apply_payment` idempotente, webhook con firma, link de pago y bitácora, con 32 tests de base y 42 unitarios. Falta probarlo contra Mercado Pago de prueba (necesita credenciales).
+
 ## Próximo
 1. ~~Políticas RLS por rol~~ (hecho).
 2. ~~Cliente Supabase y tipos~~ (hecho).

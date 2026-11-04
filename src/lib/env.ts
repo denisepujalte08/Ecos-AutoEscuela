@@ -22,6 +22,17 @@ function parse<T extends z.ZodType>(schema: T, label: string): z.infer<T> {
   return result.data;
 }
 
+const mercadoPagoSchema = z.object({
+  MP_ACCESS_TOKEN: z.string().min(1),
+  MP_WEBHOOK_SECRET: z.string().min(1),
+  // URL pública del sitio (para back_urls y webhook). En local, la del túnel.
+  APP_URL: z.url(),
+});
+
+export function mercadoPagoEnv() {
+  return parse(mercadoPagoSchema, 'Mercado Pago');
+}
+
 export function publicEnv() {
   return parse(publicSchema, 'públicas');
 }
