@@ -107,3 +107,7 @@ Antes del primer pago real:
 | `.github/CODEOWNERS` | Quién debe revisar cada área |
 | `.env.example` | Variables de entorno necesarias (sin valores) |
 | `.editorconfig`, `.gitattributes` | Formato y saltos de línea consistentes |
+
+## Versión de Node.js
+
+`package.json` exige `node >=24.22.1` (campo `engines`). Motivo: CVE-2026-111497 (Brotli, ejecución remota de código, severidad alta) está corregido desde la 24.22.1. El CI usa `node-version: 24` (última 24.x). Node publicará más parches de seguridad el 11/11/2026: al salir, revisar las notas y subir el mínimo. En producción (Vercel) fijar una versión de Node 24 parcheada.
