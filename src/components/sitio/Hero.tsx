@@ -74,7 +74,7 @@ function HeroB() {
             Escuela de Conducción Segura
           </p>
           <h1 className="mb-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
-            Aprendé a manejar con <span className="text-primary">confianza</span>
+            Aprendé a manejar con <span className="text-primary-dark">confianza</span>
           </h1>
           <p className="mb-8 max-w-lg text-lg leading-relaxed text-muted-foreground">
             Clases prácticas en auto, de a una por día, con instructores que te acompañan paso a paso. Elegí tu curso

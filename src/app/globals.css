@@ -42,13 +42,13 @@
   --color-foreground: #1a1a1a;
   --color-card: #ffffff;
   --color-card-foreground: #1a1a1a;
-  --color-primary: #fb6d00;
-  --color-primary-dark: #d95a00;
+  --color-primary: #f08a3e;
+  --color-primary-dark: #d96f26;
   --color-on-primary: #141414;
   --color-secondary: #141414;
   --color-muted-foreground: #6b6560;
   --color-border: #eadfd2;
-  --cta-fondo: linear-gradient(135deg, #ff8a2a, #fb6d00);
+  --cta-fondo: linear-gradient(135deg, #f6a45e, #f08a3e);
   --cta-texto: #141414;
   --fondo-cursos: #f6ede3;
 }
