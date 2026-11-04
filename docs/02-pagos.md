@@ -37,11 +37,25 @@ La tasa del examen **no está incluida** en el curso.
 | `failed`, `canceled` (una orden vencida figura como `canceled`) | `rejected` |
 | `created`, `processing`, `action_required` y cualquier estado desconocido | `pending` |
 
-**Puntos a verificar en el entorno de pruebas** (la documentación pública no los detalla del todo):
-- Que la firma del webhook de Orders se arma igual que la de pagos (`id:<data.id>;request-id:<x-request-id>;ts:<ts>;`, con el id en minúsculas).
-- La vigencia mínima aceptada en `expiration_time` (se envía como `PT<minutos>M`).
-- Que `config.online` acepta las URLs de retorno tal como las enviamos.
-- La lista completa de `status_detail` de una orden procesada.
+**Verificado contra el entorno de pruebas real de Mercado Pago** (2026-11-04):
+- ✅ `POST /v1/orders` acepta nuestro formato: monto como string, `items`, `external_reference`, `config.online` con las URLs de retorno y `auto_return`.
+- ✅ Vigencia `expiration_time: "PT15M"` aceptada (la orden vuelve con ese valor).
+- ✅ `X-Idempotency-Key`: repetir la petición devuelve la **misma** orden.
+- ✅ La orden sin pagar vuelve como `created`, moneda `ARS`, con nuestra `external_reference`.
+- ✅ Una orden pagada con tarjeta de prueba vuelve como `processed` + `accredited`, `total_paid_amount` igual al monto, y un pago `processed`/`accredited` dentro de `transactions.payments`. Se traduce a `approved` con el monto cobrado.
+- ⚠️ Pagar con una cuenta **real** una orden de un vendedor de **prueba** se bloquea ("una de las partes es de prueba"). Hay que usar el comprador de prueba.
+
+**Pendiente de verificar** (necesita una URL pública para recibir el webhook):
+- Que la firma del webhook de Orders se arma igual que la de pagos (`id:<data.id>;request-id:<x-request-id>;ts:<ts>;`, con el id en minúsculas). Ojo: el id de una orden viene en mayúsculas (`ORDTST…`); confirmar cómo se normaliza.
+- El nombre exacto del evento y el cuerpo del aviso (`type=order`, `action=order.processed`).
+- Estados de órdenes vencidas, rechazadas y devueltas (solo `processed`/`created` se vieron en vivo).
+
+### Cómo repetir la prueba real
+```powershell
+$env:MP_LIVE='1'; npx vitest run api.live          # crea una orden de $100 y muestra su link de pago
+$env:MP_LIVE='1'; $env:MP_ORDER_ID='ORD…'; npx vitest run api.live -t "consulta una orden"   # ver su estado
+```
+Requiere `MP_ACCESS_TOKEN` de **prueba** en `.env.local`. Pagar con el **comprador de prueba** y una tarjeta de prueba, en una ventana de incógnito.
 
 La página de retorno solo muestra "confirmando tu pago" y consulta el estado de la base.
 
