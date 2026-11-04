@@ -239,6 +239,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"webhook_events": {
+                  Row: {
+                    "error": string | null,"event_key": string | null,"id": number,"outcome": string | null,"payload": Json | null,"proveedor": string,"received_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "error"?: string | null,"event_key"?: string | null,"id"?: never,"outcome"?: string | null,"payload"?: Json | null,"proveedor": string,"received_at"?: string
+                  }
+                  Update: {
+                    "error"?: string | null,"event_key"?: string | null,"id"?: never,"outcome"?: string | null,"payload"?: Json | null,"proveedor"?: string,"received_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 }
           }
           Views: {
@@ -247,6 +261,9 @@ isOneToOne: false
           Functions: {
             "app_role":
 { Args: Record<PropertyKey, never>; Returns: Database["public"]['Enums']["user_role"]
+                           },
+"apply_payment":
+{ Args: { "p_enrollment_id": string,"p_estado": string,"p_monto": number,"p_proveedor": string,"p_provider_payment_id": string,"p_raw"?: Json }; Returns: string
                            },
 "cancel_enrollment":
 { Args: { "p_enrollment_id": string }; Returns: undefined
