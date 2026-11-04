@@ -2,16 +2,24 @@ import Image from 'next/image';
 import { MENSAJES, whatsappUrl } from '@/lib/site';
 import { Boton } from './Boton';
 import { IconoFlecha } from './iconos';
-import { MarcoImagen } from './MarcoImagen';
 
 /** Diseño A: como la plantilla (foto a pantalla completa, degradé y onda blanca). */
 function HeroA() {
   return (
     <section className="solo-a relative flex snap-start min-h-[min(100svh,52rem)] items-center overflow-hidden pb-24 pt-20">
-      <div className="absolute inset-0">
-        {/* PROVISORIO: foto de la plantilla. Se reemplaza por una foto real de ECOS. */}
-        <Image src="/plantilla/hero.jpg" alt="Foto de portada" fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-hero-overlay" />
+      {/* Fondo oscuro; en pantallas grandes el auto va a la derecha, con el borde izquierdo difuminado. */}
+      <div className="absolute inset-0 bg-secondary">
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[68%] lg:[mask-image:linear-gradient(to_right,transparent,black_30%)]">
+          <Image
+            src="/auto-ecos.jpg"
+            alt="Auto de ECOS Escuela de Conducción Segura"
+            fill
+            priority
+            sizes="(min-width: 1024px) 70vw, 100vw"
+            className="object-cover object-[center_72%] lg:object-center"
+          />
+        </div>
+        <div className="absolute inset-0 bg-hero-overlay lg:opacity-30" />
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-4 py-10 lg:px-8">
@@ -83,7 +91,14 @@ function HeroB() {
           </div>
         </div>
 
-        <MarcoImagen etiqueta="auto de ECOS / alumno al volante" className="aspect-[4/3] max-h-[55svh] w-full" />
+        <Image
+          src="/auto-ecos.jpg"
+          alt="Auto de ECOS Escuela de Conducción Segura"
+          width={876}
+          height={554}
+          sizes="(min-width: 1024px) 560px, 100vw"
+          className="aspect-[4/3] max-h-[55svh] w-full rounded-2xl object-cover shadow-card-hover"
+        />
       </div>
     </section>
   );
