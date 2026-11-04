@@ -11,9 +11,13 @@
 - [x] Políticas RLS y GRANTs por rol, con 65 tests (`docs/05-seguridad.md`).
 - [x] Flujo de trabajo: CI, PR obligatorio, `main` protegido (`docs/06-devops.md`).
 
+- [x] Cliente de Supabase del lado servidor, tipos generados y módulos `booking` (turnos libres, reserva, sugerencias) con 16 tests unitarios.
+
 ## Próximo
 1. ~~Políticas RLS por rol~~ (hecho).
-2. **Cliente de Supabase en Next.js** (servidor y navegador) y tipos generados.
+2. ~~Cliente Supabase y tipos~~ (hecho).
+3. **Avisar a Denise antes de empezar el front:** tiene una plantilla elegida.
+4. **Cliente de Supabase en Next.js** (servidor y navegador) y tipos generados.
 3. **Pantalla de reserva** (elegir curso → turnos libres → datos → método de pago).
 4. **Mercado Pago:** preferencia, webhook idempotente, página de retorno.
 5. **Panel admin:** agenda del día con número de clase, marcar clase dictada, pagos pendientes con comprobante, bloqueos, reservas manuales.

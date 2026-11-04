@@ -10,11 +10,13 @@ Sistema de reservas y gestión para una autoescuela: web pública, compra de cur
 npm run dev          # app en http://localhost:3000
 npm run lint         # ESLint
 npm run typecheck    # tsc --noEmit
+npm test             # tests unitarios (Vitest)
 npm run build        # build de producción
 npm run db:start     # Supabase local (requiere Docker)
 npm run db:reset     # aplica migraciones + seed
 npm run db:test      # tests pgTAP
-npm run check        # lint + typecheck + db:test (correr antes de abrir un PR)
+npm run db:types     # regenera src/lib/db/database.types.ts (con la base local encendida)
+npm run check        # lint + typecheck + tests + db:test (correr antes de abrir un PR)
 ```
 
 ## Flujo de trabajo (obligatorio)
@@ -45,6 +47,10 @@ npm run check        # lint + typecheck + db:test (correr antes de abrir un PR)
 - Checklist completo: `docs/05-seguridad.md`.
 
 ## Código
+
+- **Cambió el esquema o una función SQL → correr `npm run db:types` y commitear `database.types.ts`.** El archivo es generado: no se edita a mano.
+- Dos clientes de Supabase, siempre del lado servidor (`src/lib/db/server.ts`): `createPublicClient()` (rol `anon`, para lo que se ve sin sesión) y `createAdminClient()` (`service_role`, solo para reservas, pagos y webhooks). Usar el de menor privilegio que alcance.
+- Los módulos de `src/lib/` que tocan datos importan `server-only` y reciben el cliente por parámetro (con valor por defecto) para poder testearse con un cliente simulado.
 
 - TypeScript estricto. Sin `any` salvo justificación en un comentario.
 - Lógica de negocio en `src/lib/` (booking, payments, notifications, db); las pantallas solo la llaman.
