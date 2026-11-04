@@ -106,6 +106,26 @@ Una retención vencida **deja de bloquear** el turno en `get_free_slots` aunque 
 Las funciones lanzan errores con mensaje estable para que el servidor los traduzca:
 `course_not_found`, `student_not_found`, `wrong_lesson_count`, `duplicate_slots`, `slot_unavailable`, `slot_taken`, `student_day_conflict`, `enrollment_not_confirmable`, `holds_lost`, `lesson_not_scheduled`.
 
+## Capa de aplicación (`src/lib/`)
+
+```
+src/lib/
+  env.ts                 variables de entorno validadas con Zod (perezoso)
+  db/server.ts           createPublicClient (anon) y createAdminClient (service_role)
+  db/database.types.ts   tipos generados desde la base (npm run db:types)
+  booking/slots.ts       getFreeSlots(from, to)           → get_free_slots
+  booking/enrollment.ts  createEnrollment(...)            → create_enrollment
+                         suggestSlots(...)                → suggest_slots
+  booking/errors.ts      BookingError con los códigos de negocio de la base
+```
+
+- **Privilegio mínimo:** lo público (turnos libres) usa el cliente `anon`; solo la reserva usa `service_role`.
+- **Los errores de negocio son tipados:** la base lanza `slot_taken`, `student_day_conflict`, etc., y `BookingError` los expone con `code`, `detail` e `isSlotProblem` (se resuelven eligiendo otro horario, ver `suggestSlots`).
+- **El monto nunca viaja desde el navegador:** `createEnrollment` no recibe monto; la base lo calcula.
+- Entradas validadas con Zod antes de llegar a la base; `getFreeSlots` limita el rango a 31 días.
+- Los módulos importan `server-only`: si alguien los importa desde código de navegador, el build falla.
+- Cualquier cambio en el esquema obliga a regenerar los tipos; el compilador marca lo que se rompe.
+
 ## Pendiente de construir
 
 Ver `docs/04-roadmap.md`.
