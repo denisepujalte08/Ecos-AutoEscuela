@@ -5,6 +5,7 @@ import { processMercadoPagoWebhook } from './webhook';
 
 const SECRET = 'secreto-de-prueba';
 const ENROLLMENT = '5f2c8d0e-1111-4222-8333-444455556666';
+const ORDER_ID = 'ORDTST01M4V4VSXCTN8ZN1FJ02KKMFGE';
 
 beforeEach(() => {
   vi.stubEnv('MP_ACCESS_TOKEN', 'TEST-token');
@@ -14,20 +15,33 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 function signedRequest(opts: { dataId?: string; type?: string; body?: unknown; signed?: boolean } = {}) {
-  const dataId = opts.dataId ?? '777';
+  const dataId = opts.dataId ?? ORDER_ID;
   const ts = '1704908010';
   const requestId = 'req-1';
-  const v1 = createHmac('sha256', SECRET).update(`id:${dataId};request-id:${requestId};ts:${ts};`).digest('hex');
-  const url = `https://ecos.test/api/webhooks/mercadopago?data.id=${dataId}&type=${opts.type ?? 'payment'}`;
+  // Mercado Pago normaliza a minúsculas los ids alfanuméricos al firmar.
+  const v1 = createHmac('sha256', SECRET)
+    .update(`id:${dataId.toLowerCase()};request-id:${requestId};ts:${ts};`)
+    .digest('hex');
+  const url = `https://ecos.test/api/webhooks/mercadopago?data.id=${dataId}&type=${opts.type ?? 'order'}`;
   return new Request(url, {
     method: 'POST',
     headers: {
       'x-request-id': requestId,
       ...(opts.signed === false ? {} : { 'x-signature': `ts=${ts},v1=${v1}` }),
     },
-    body: JSON.stringify(opts.body ?? { type: 'payment', data: { id: dataId } }),
+    body: JSON.stringify(opts.body ?? { action: 'order.processed', type: 'order', data: { id: dataId } }),
   });
 }
+
+const paidOrder = {
+  id: ORDER_ID,
+  status: 'processed',
+  status_detail: 'accredited',
+  total_amount: '100000.00',
+  total_paid_amount: '100000.00',
+  currency: 'ARS',
+  external_reference: ENROLLMENT,
+};
 
 function setup(opts: { apiStatus?: number; apiBody?: unknown; rpcResult?: { data: unknown; error: unknown } } = {}) {
   const insert = vi.fn().mockResolvedValue({ error: null });
@@ -37,14 +51,7 @@ function setup(opts: { apiStatus?: number; apiBody?: unknown; rpcResult?: { data
   const fetchFn = vi.fn().mockResolvedValue({
     ok: status < 300,
     status,
-    json: async () =>
-      opts.apiBody ?? {
-        id: 777,
-        status: 'approved',
-        transaction_amount: 100000,
-        currency_id: 'ARS',
-        external_reference: ENROLLMENT,
-      },
+    json: async () => opts.apiBody ?? paidOrder,
   });
   return { client, rpc, insert, fetchFn };
 }
@@ -59,56 +66,67 @@ describe('processMercadoPagoWebhook', () => {
     expect(insert).not.toHaveBeenCalled();
   });
 
-  it('confirma un pago aprobado usando los datos de la API, no los del aviso', async () => {
+  it('confirma una orden acreditada usando los datos de la API, no los del aviso', async () => {
     const { client, rpc, fetchFn, insert } = setup();
-    const req = signedRequest({ body: { type: 'payment', data: { id: '777' }, monto: 1, status: 'approved' } });
+    const req = signedRequest({
+      body: { action: 'order.processed', type: 'order', data: { id: ORDER_ID, total_amount: '1', status: 'processed' } },
+    });
 
     const res = await processMercadoPagoWebhook(req, { client, fetchFn });
 
     expect(res).toEqual({ status: 200, body: { ok: true, outcome: 'confirmed' } });
+    expect(fetchFn.mock.calls[0][0]).toBe(`https://api.mercadopago.com/v1/orders/${ORDER_ID}`);
     expect(rpc).toHaveBeenCalledWith('apply_payment', {
       p_enrollment_id: ENROLLMENT,
       p_proveedor: 'mercadopago',
-      p_provider_payment_id: '777',
+      p_provider_payment_id: ORDER_ID,
       p_monto: 100000,
       p_estado: 'approved',
       p_raw: expect.anything(),
     });
-    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ outcome: 'confirmed', event_key: '777' }));
+    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ outcome: 'confirmed', event_key: ORDER_ID }));
   });
 
-  it('ignora avisos que no son de pagos (con 200, para que no reintente)', async () => {
+  it('una orden creada (sin pagar) se registra como pendiente y no confirma', async () => {
+    const { client, rpc, fetchFn } = setup({
+      apiBody: { ...paidOrder, status: 'created', status_detail: 'created', total_paid_amount: '0.00' },
+      rpcResult: { data: 'pending', error: null },
+    });
+    const res = await processMercadoPagoWebhook(signedRequest(), { client, fetchFn });
+    expect(res.body.outcome).toBe('pending');
+    expect(rpc.mock.calls[0][1]).toMatchObject({ p_estado: 'pending', p_monto: 100000 });
+  });
+
+  it('ignora avisos que no son de órdenes (con 200, para que no reintente)', async () => {
     const { client, rpc, fetchFn } = setup();
-    const res = await processMercadoPagoWebhook(signedRequest({ type: 'merchant_order' }), { client, fetchFn });
-    expect(res).toEqual({ status: 200, body: { ok: true, outcome: 'ignored' } });
+    for (const type of ['payment', 'merchant_order']) {
+      const res = await processMercadoPagoWebhook(signedRequest({ type }), { client, fetchFn });
+      expect(res).toEqual({ status: 200, body: { ok: true, outcome: 'ignored' } });
+    }
     expect(fetchFn).not.toHaveBeenCalled();
     expect(rpc).not.toHaveBeenCalled();
   });
 
-  it('ignora pagos sin referencia a una inscripción', async () => {
-    const { client, rpc, fetchFn } = setup({
-      apiBody: { id: 777, status: 'approved', transaction_amount: 1, currency_id: 'ARS', external_reference: 'cualquier-cosa' },
-    });
+  it('ignora órdenes sin referencia a una inscripción', async () => {
+    const { client, rpc, fetchFn } = setup({ apiBody: { ...paidOrder, external_reference: 'cualquier-cosa' } });
     const res = await processMercadoPagoWebhook(signedRequest(), { client, fetchFn });
     expect(res.body.outcome).toBe('ignored_no_reference');
     expect(rpc).not.toHaveBeenCalled();
   });
 
-  it('no aplica pagos en otra moneda: los deja para revisión', async () => {
-    const { client, rpc, fetchFn, insert } = setup({
-      apiBody: { id: 777, status: 'approved', transaction_amount: 100, currency_id: 'USD', external_reference: ENROLLMENT },
-    });
+  it('no aplica órdenes en otra moneda: las deja para revisión', async () => {
+    const { client, rpc, fetchFn, insert } = setup({ apiBody: { ...paidOrder, currency: 'USD' } });
     const res = await processMercadoPagoWebhook(signedRequest(), { client, fetchFn });
     expect(res.body.outcome).toBe('needs_review');
     expect(rpc).not.toHaveBeenCalled();
     expect(insert).toHaveBeenCalledWith(expect.objectContaining({ outcome: 'needs_review' }));
   });
 
-  it('devuelve 200 si el pago no existe en Mercado Pago (reintentar no lo arregla)', async () => {
+  it('devuelve 200 si la orden no existe en Mercado Pago (reintentar no lo arregla)', async () => {
     const { client, fetchFn } = setup({ apiStatus: 404, apiBody: {} });
     const res = await processMercadoPagoWebhook(signedRequest(), { client, fetchFn });
     expect(res.status).toBe(200);
-    expect(res.body.outcome).toBe('ignored_unknown_payment');
+    expect(res.body.outcome).toBe('ignored_unknown_order');
   });
 
   it('devuelve 500 si Mercado Pago falla, para que reintente', async () => {

@@ -22,15 +22,22 @@ function parse<T extends z.ZodType>(schema: T, label: string): z.infer<T> {
   return result.data;
 }
 
-const mercadoPagoSchema = z.object({
-  MP_ACCESS_TOKEN: z.string().min(1),
-  MP_WEBHOOK_SECRET: z.string().min(1),
-  // URL pública del sitio (para back_urls y webhook). En local, la del túnel.
-  APP_URL: z.url(),
-});
+// Cada pieza pide solo lo que usa: así falta una variable y el error dice cuál.
+const accessTokenSchema = z.object({ MP_ACCESS_TOKEN: z.string().min(1) });
+const webhookSecretSchema = z.object({ MP_WEBHOOK_SECRET: z.string().min(1) });
+// URL pública del sitio (para las URLs de retorno). En local, la del túnel.
+const appUrlSchema = z.object({ APP_URL: z.url() });
 
-export function mercadoPagoEnv() {
-  return parse(mercadoPagoSchema, 'Mercado Pago');
+export function mercadoPagoAccessToken() {
+  return parse(accessTokenSchema, 'Mercado Pago: token').MP_ACCESS_TOKEN;
+}
+
+export function mercadoPagoWebhookSecret() {
+  return parse(webhookSecretSchema, 'Mercado Pago: webhook').MP_WEBHOOK_SECRET;
+}
+
+export function appUrl() {
+  return parse(appUrlSchema, 'sitio').APP_URL;
 }
 
 export function publicEnv() {

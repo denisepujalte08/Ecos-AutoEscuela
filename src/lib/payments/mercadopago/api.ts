@@ -1,33 +1,40 @@
 import 'server-only';
-import { mercadoPagoEnv } from '@/lib/env';
+import { mercadoPagoAccessToken } from '@/lib/env';
 
 const API = 'https://api.mercadopago.com';
 
 export type FetchLike = typeof fetch;
 
-/** Estados de pago que entiende apply_payment. */
+/** Estados que entiende apply_payment (ver supabase/migrations/…_payments.sql). */
 export type PaymentStatus = 'approved' | 'pending' | 'rejected' | 'refunded';
 
-export function mapPaymentStatus(mpStatus: string): PaymentStatus {
-  switch (mpStatus) {
-    case 'approved':
-      return 'approved';
+/**
+ * Traduce el estado de una orden de Mercado Pago (API de Orders) al de apply_payment.
+ *
+ * Solo `processed` + `accredited` (o con devolución parcial) cuenta como pago aprobado.
+ * Cualquier estado desconocido se trata como "pendiente": nunca confirma una inscripción.
+ * Una orden vencida figura como `canceled`.
+ */
+export function mapOrderStatus(status: string, statusDetail?: string | null): PaymentStatus {
+  switch (status) {
+    case 'processed':
+      return statusDetail === 'accredited' || statusDetail === 'partially_refunded' ? 'approved' : 'pending';
     case 'refunded':
-    case 'charged_back':
       return 'refunded';
-    case 'rejected':
+    case 'failed':
+    case 'canceled':
     case 'cancelled':
       return 'rejected';
     default:
-      // pending, in_process, in_mediation, authorized y cualquier estado desconocido
-      // se tratan como "no acreditado": nunca confirman una inscripción.
+      // created, processing, action_required y cualquier estado nuevo
       return 'pending';
   }
 }
 
-export type MercadoPagoPayment = {
+export type MercadoPagoOrder = {
   id: string;
   status: PaymentStatus;
+  /** Monto efectivamente cobrado si hay pago acreditado; si no, el monto de la orden. */
   amount: number;
   currency: string;
   externalReference: string | null;
@@ -49,11 +56,11 @@ export class MercadoPagoApiError extends Error {
 }
 
 async function call(path: string, init: RequestInit, fetchFn: FetchLike) {
-  const { MP_ACCESS_TOKEN } = mercadoPagoEnv();
   const res = await fetchFn(`${API}${path}`, {
     ...init,
     headers: {
-      Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+      accept: 'application/json',
+      Authorization: `Bearer ${mercadoPagoAccessToken()}`,
       'Content-Type': 'application/json',
       ...init.headers,
     },
@@ -65,58 +72,72 @@ async function call(path: string, init: RequestInit, fetchFn: FetchLike) {
 }
 
 /**
- * Consulta el pago directamente a Mercado Pago. Es la ÚNICA fuente de verdad: el cuerpo
- * del webhook solo trae un id y nunca se confía en él.
+ * Consulta la orden directamente a Mercado Pago. Es la ÚNICA fuente de verdad: el cuerpo
+ * del webhook solo se usa para saber qué orden consultar.
  */
-export async function getPayment(id: string, fetchFn: FetchLike = fetch): Promise<MercadoPagoPayment> {
-  const p = await call(`/v1/payments/${encodeURIComponent(id)}`, { method: 'GET' }, fetchFn);
+export async function getOrder(id: string, fetchFn: FetchLike = fetch): Promise<MercadoPagoOrder> {
+  const o = await call(`/v1/orders/${encodeURIComponent(id)}`, { method: 'GET' }, fetchFn);
+  const status = mapOrderStatus(String(o.status), typeof o.status_detail === 'string' ? o.status_detail : null);
+  const total = Number(o.total_amount);
+  const paid = Number(o.total_paid_amount);
+
   return {
-    id: String(p.id),
-    status: mapPaymentStatus(String(p.status)),
-    amount: Number(p.transaction_amount),
-    currency: String(p.currency_id),
-    externalReference: typeof p.external_reference === 'string' ? p.external_reference : null,
-    raw: p,
+    id: String(o.id),
+    status,
+    amount: status === 'approved' && Number.isFinite(paid) && paid > 0 ? paid : total,
+    currency: String(o.currency),
+    externalReference: typeof o.external_reference === 'string' ? o.external_reference : null,
+    raw: o,
   };
 }
 
-export type PreferenceInput = {
+export type CreateOrderInput = {
   title: string;
   /** Monto en pesos, calculado por la base de datos. */
   amount: number;
   externalReference: string;
-  notificationUrl: string;
-  backUrls: { success: string; failure: string; pending: string };
-  /** Vencimiento del link de pago (igual al de la retención de turnos). */
-  expiresAt?: string;
+  /** Clave de idempotencia (UUID): repetir la petición no crea una orden nueva. */
+  idempotencyKey: string;
+  /** Vigencia de la orden en minutos (igual a lo que queda de la retención de turnos). */
+  expiresInMinutes?: number;
+  returnUrls: { success: string; pending: string; failure: string };
 };
 
-export type Preference = { id: string; initPoint: string; sandboxInitPoint: string | null };
+export type CreatedOrder = { id: string; checkoutUrl: string };
 
-export async function createPreference(input: PreferenceInput, fetchFn: FetchLike = fetch): Promise<Preference> {
+/** Formato de dinero que pide la API: string con dos decimales. */
+export function formatAmount(amount: number) {
+  return amount.toFixed(2);
+}
+
+export async function createOrder(input: CreateOrderInput, fetchFn: FetchLike = fetch): Promise<CreatedOrder> {
+  const amount = formatAmount(input.amount);
   const body = {
-    items: [
-      {
-        id: input.externalReference,
-        title: input.title,
-        quantity: 1,
-        unit_price: input.amount,
-        currency_id: 'ARS',
-      },
-    ],
+    type: 'online',
+    processing_mode: 'manual',
+    total_amount: amount,
     external_reference: input.externalReference,
-    notification_url: input.notificationUrl,
-    back_urls: input.backUrls,
-    auto_return: 'approved',
-    ...(input.expiresAt
-      ? { expires: true, expiration_date_to: input.expiresAt }
-      : {}),
+    description: input.title,
+    items: [{ title: input.title, unit_price: amount, quantity: 1 }],
+    ...(input.expiresInMinutes ? { expiration_time: `PT${Math.max(1, Math.floor(input.expiresInMinutes))}M` } : {}),
+    config: {
+      online: {
+        success_url: input.returnUrls.success,
+        pending_url: input.returnUrls.pending,
+        failure_url: input.returnUrls.failure,
+        auto_return: 'approved',
+      },
+    },
   };
 
-  const p = await call('/checkout/preferences', { method: 'POST', body: JSON.stringify(body) }, fetchFn);
-  return {
-    id: String(p.id),
-    initPoint: String(p.init_point),
-    sandboxInitPoint: typeof p.sandbox_init_point === 'string' ? p.sandbox_init_point : null,
-  };
+  const o = await call(
+    '/v1/orders',
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'X-Idempotency-Key': input.idempotencyKey },
+    },
+    fetchFn,
+  );
+  return { id: String(o.id), checkoutUrl: String(o.checkout_url) };
 }
