@@ -65,7 +65,7 @@ function FooterB() {
     <footer className="solo-b border-t border-border bg-[#f6ede3]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3 lg:px-8">
         <div>
-          <Image src="/logo-ecos.svg" alt="ECOS Escuela de Conducción Segura" width={128} height={40} />
+          <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Clases prácticas de manejo, en turnos de 40 minutos y con instructores profesionales.
           </p>

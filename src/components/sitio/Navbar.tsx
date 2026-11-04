@@ -15,7 +15,7 @@ export function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg [[data-diseno=b]_&]:bg-background/95">
       <nav aria-label="Principal" className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
         <Link href="/" aria-label="ECOS, ir al inicio" onClick={() => setAbierto(false)}>
-          <Image src="/logo-ecos.svg" alt="ECOS Escuela de Conducción Segura" width={128} height={40} priority />
+          <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} priority />
         </Link>
 
         <ul className="hidden items-center gap-8 lg:flex">
