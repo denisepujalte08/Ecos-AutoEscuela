@@ -8,8 +8,11 @@
 - [x] Tests pgTAP de la lógica de reserva.
 - [x] Seed de desarrollo con los cursos y precios del cartel.
 
+- [x] Políticas RLS y GRANTs por rol, con 65 tests (`docs/05-seguridad.md`).
+- [x] Flujo de trabajo: CI, PR obligatorio, `main` protegido (`docs/06-devops.md`).
+
 ## Próximo
-1. **Políticas RLS** por rol (admin/owner ven todo, alumno solo lo suyo).
+1. ~~Políticas RLS por rol~~ (hecho).
 2. **Cliente de Supabase en Next.js** (servidor y navegador) y tipos generados.
 3. **Pantalla de reserva** (elegir curso → turnos libres → datos → método de pago).
 4. **Mercado Pago:** preferencia, webhook idempotente, página de retorno.

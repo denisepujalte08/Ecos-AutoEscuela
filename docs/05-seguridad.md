@@ -13,6 +13,34 @@ Qué se protege: **datos personales de alumnos** (DNI, fecha de nacimiento, tel�
 | Sin datos de tarjeta en el sistema (pagos por redirección) | `docs/02-pagos.md` |
 | `.env*` ignorado por git | `.gitignore` |
 
+## Permisos por rol (implementado y probado)
+
+Definido en `supabase/migrations/20261104000004_rls_policies.sql` y probado en `supabase/tests/database/rls.test.sql` (65 tests).
+
+Dos capas: **GRANTs mínimos** (qué puede intentar cada rol de Postgres) y **RLS** (qué filas ve dentro de eso). Las escrituras sobre inscripciones, clases y pagos **no se hacen por tabla**: pasan por funciones SQL que solo ejecuta el servidor (`service_role`).
+
+| Dato | Público | Alumno | Admin | Dueño |
+|---|---|---|---|---|
+| Cursos activos y reglas de descuento | leer | leer | leer / editar | leer / editar |
+| Turnos libres (`get_free_slots`) | sí | sí | sí | sí |
+| Su ficha, inscripciones, clases y pagos | – | solo lo propio | todo (lectura) | todo (lectura) |
+| Alumnos | – | solo su ficha (lectura) | leer / crear / editar | leer / crear / editar |
+| Profesores, horarios, bloqueos | – | – | leer / editar | leer / editar |
+| Inscripciones, clases, pagos (escritura) | – | – | solo por funciones | solo por funciones |
+| Configuración (`settings`) | – | – | leer | leer / editar |
+| Descuentos por método de pago | leer | leer | leer | leer / editar |
+| Roles de usuario (`profiles`) | – | solo el suyo (lectura) | leer | leer / cambiar |
+| Auditoría | – | – | – | leer |
+
+Garantías:
+- **Todo usuario nuevo es alumno.** Un trigger crea su perfil con rol `student`; solo el dueño puede cambiarlo. Un alumno **no puede escalar privilegios** (probado).
+- Un alumno no ve datos de otro alumno (probado con dos alumnos).
+- Nadie puede modificar ni falsificar la auditoría, ni siquiera el dueño.
+- Las funciones de reserva (`create_enrollment`, `confirm_enrollment`, …) no son ejecutables por usuarios finales.
+- Las tablas que se creen en el futuro nacen **sin** privilegios para `anon` y `authenticated`.
+
+Supuesto pendiente de confirmar (pregunta 38): administración gestiona cursos, horarios, bloqueos y alumnos; solo el dueño toca configuración, descuentos, roles y auditoría.
+
 ## Antes de lanzar (imprescindible)
 
 ### 1. Acceso y autenticación
@@ -21,9 +49,9 @@ Qué se protege: **datos personales de alumnos** (DNI, fecha de nacimiento, tel�
 - Roles mínimos: cada usuario ve solo lo que necesita.
 - Sesiones con vencimiento; poder cerrar sesión en todos los dispositivos.
 
-### 2. Políticas RLS por rol
-- Admin/owner ven todo; el alumno solo lo suyo; el público solo cursos activos y turnos libres.
-- **Tests que intentan leer datos ajenos** (un alumno leyendo filas de otro debe fallar).
+### 2. Políticas RLS por rol — **hecho** (ver tabla de permisos arriba)
+- Tests que intentan leer y escribir datos ajenos y escalar privilegios.
+- Pendiente: repetir estos tests cuando se agreguen tablas o vistas nuevas.
 
 ### 3. API pública
 - Límite de peticiones (rate limiting) en reservas, login y consulta de turnos.
