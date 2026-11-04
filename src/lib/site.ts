@@ -1,0 +1,28 @@
+/** Datos públicos del sitio. Un solo lugar para cambiar nombre, teléfono y mensajes. */
+
+export const SITE = {
+  nombre: 'ECOS',
+  nombreCompleto: 'ECOS – Escuela de Conducción Segura',
+  descripcion:
+    'Clases prácticas de manejo en auto, en turnos de 40 minutos con instructores profesionales. Reservá tu curso por WhatsApp.',
+  /** Solo dígitos, con código de país (+54 9 = celular de Argentina). */
+  whatsappNumero: '5493624855645',
+  whatsappVisible: '+54 9 362 485-5645',
+} as const;
+
+/** Arma el enlace de WhatsApp con un mensaje ya escrito. */
+export function whatsappUrl(mensaje: string, numero: string = SITE.whatsappNumero): string {
+  return `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+}
+
+export const MENSAJES = {
+  consulta: 'Hola! Quiero consultar por los cursos de manejo de ECOS.',
+  curso: (nombre: string) => `Hola! Quiero reservar el ${nombre} en ECOS.`,
+} as const;
+
+export const ENLACES = [
+  { etiqueta: 'Inicio', href: '/' },
+  { etiqueta: 'Cursos', href: '/cursos' },
+  { etiqueta: 'Nosotros', href: '/nosotros' },
+  { etiqueta: 'Contacto', href: '/contacto' },
+] as const;
