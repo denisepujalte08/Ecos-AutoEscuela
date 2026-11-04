@@ -11,10 +11,7 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 
-function setup(opts: {
-  enrollment?: Record<string, unknown> | null;
-  holdExpiresAt?: string | null;
-}) {
+function setup(opts: { enrollment?: Record<string, unknown> | null; holdExpiresAt?: string | null }) {
   const enrollment =
     opts.enrollment === undefined
       ? { id: ID, monto: '165000.00', estado: 'pending_payment', metodo: 'tarjeta', courses: { nombre: 'Curso de 5 clases' } }
@@ -42,38 +39,43 @@ function setup(opts: {
   const fetchFn = vi.fn().mockResolvedValue({
     ok: true,
     status: 201,
-    json: async () => ({ id: 'pref-1', init_point: 'https://mp/pay', sandbox_init_point: 'https://mp/sb' }),
+    json: async () => ({ id: 'ORD1', checkout_url: 'https://mp/checkout' }),
   });
   return { client, fetchFn };
 }
 
-const future = () => new Date(Date.now() + 10 * 60_000).toISOString();
+const inMinutes = (m: number) => new Date(Date.now() + m * 60_000).toISOString();
 
 describe('createCardCheckout', () => {
-  it('toma el monto de la base de datos y lo manda como número', async () => {
-    const { client, fetchFn } = setup({ holdExpiresAt: future() });
+  it('toma el monto de la base de datos y devuelve la URL de pago', async () => {
+    const { client, fetchFn } = setup({ holdExpiresAt: inMinutes(10) });
 
-    const pref = await createCardCheckout(ID, { client, fetchFn });
+    const order = await createCardCheckout(ID, { client, fetchFn });
 
-    const sent = JSON.parse(fetchFn.mock.calls[0][1].body);
-    expect(sent.items[0].unit_price).toBe(165000);
+    const [, init] = fetchFn.mock.calls[0];
+    const sent = JSON.parse(init.body);
+    expect(sent.total_amount).toBe('165000.00');
     expect(sent.items[0].title).toBe('Curso de 5 clases');
     expect(sent.external_reference).toBe(ID);
-    expect(sent.notification_url).toBe('https://ecos.test/api/webhooks/mercadopago');
-    expect(sent.back_urls.success).toBe(`https://ecos.test/reserva/resultado?inscripcion=${ID}&estado=ok`);
-    expect(pref.initPoint).toBe('https://mp/pay');
+    expect(sent.config.online.success_url).toBe(`https://ecos.test/reserva/resultado?inscripcion=${ID}&estado=ok`);
+    expect(order).toEqual({ id: 'ORD1', checkoutUrl: 'https://mp/checkout' });
   });
 
-  it('hace vencer el link de pago junto con la retención de turnos', async () => {
-    const expires = future();
-    const { client, fetchFn } = setup({ holdExpiresAt: expires });
+  it('usa el id de la inscripción como clave de idempotencia (recargar no duplica la orden)', async () => {
+    const { client, fetchFn } = setup({ holdExpiresAt: inMinutes(10) });
+    await createCardCheckout(ID, { client, fetchFn });
+    expect(fetchFn.mock.calls[0][1].headers['X-Idempotency-Key']).toBe(ID);
+  });
+
+  it('hace vencer la orden junto con la retención de turnos', async () => {
+    const { client, fetchFn } = setup({ holdExpiresAt: inMinutes(10) });
     await createCardCheckout(ID, { client, fetchFn });
     const sent = JSON.parse(fetchFn.mock.calls[0][1].body);
-    expect(sent.expiration_date_to).toBe(new Date(expires).toISOString());
+    expect(['PT9M', 'PT10M']).toContain(sent.expiration_time);
   });
 
   it('rechaza una inscripción inexistente', async () => {
-    const { client, fetchFn } = setup({ enrollment: null, holdExpiresAt: future() });
+    const { client, fetchFn } = setup({ enrollment: null, holdExpiresAt: inMinutes(10) });
     await expect(createCardCheckout(ID, { client, fetchFn })).rejects.toMatchObject({ code: 'enrollment_not_found' });
     expect(fetchFn).not.toHaveBeenCalled();
   });
@@ -85,20 +87,22 @@ describe('createCardCheckout', () => {
   ])('rechaza una inscripción %s', async (_label, patch) => {
     const { client, fetchFn } = setup({
       enrollment: { id: ID, monto: '1', courses: { nombre: 'x' }, ...patch },
-      holdExpiresAt: future(),
+      holdExpiresAt: inMinutes(10),
     });
     await expect(createCardCheckout(ID, { client, fetchFn })).rejects.toBeInstanceOf(PaymentError);
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  it('rechaza si la retención de turnos ya venció', async () => {
-    const { client, fetchFn } = setup({ holdExpiresAt: new Date(Date.now() - 60_000).toISOString() });
-    await expect(createCardCheckout(ID, { client, fetchFn })).rejects.toMatchObject({ code: 'enrollment_not_payable' });
-    expect(fetchFn).not.toHaveBeenCalled();
+  it('rechaza si la retención de turnos ya venció o está por vencer', async () => {
+    for (const minutes of [-5, 0.5]) {
+      const { client, fetchFn } = setup({ holdExpiresAt: inMinutes(minutes) });
+      await expect(createCardCheckout(ID, { client, fetchFn })).rejects.toMatchObject({ code: 'enrollment_not_payable' });
+      expect(fetchFn).not.toHaveBeenCalled();
+    }
   });
 
   it('valida que el id sea un uuid', async () => {
-    const { client, fetchFn } = setup({ holdExpiresAt: future() });
+    const { client, fetchFn } = setup({ holdExpiresAt: inMinutes(10) });
     await expect(createCardCheckout('no-es-uuid', { client, fetchFn })).rejects.toThrow();
   });
 });
