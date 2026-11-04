@@ -9,28 +9,35 @@ const INCLUYE = ['Clases prácticas de 40 minutos', 'Una clase por día', 'Instr
 const DESCUENTOS =
   'Pagás tu curso y coordinamos tus turnos por WhatsApp. Consultá por descuentos pagando en efectivo o por transferencia.';
 
-/** Tarjetas de precios. Con `conTitulo` suma el encabezado grande (en la home). */
-export function TarjetasCursos({ conTitulo = false }: { conTitulo?: boolean }) {
+/**
+ * Tarjetas de precios. `conTitulo` suma el encabezado (h2, en la home).
+ * `comoPagina` lo hace el título principal (h1) de la página /cursos, con lugar para la barra fija.
+ */
+export function TarjetasCursos({ conTitulo = false, comoPagina = false }: { conTitulo?: boolean; comoPagina?: boolean }) {
   return (
-    <section className="py-24" style={{ background: 'var(--fondo-cursos)' }}>
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {conTitulo ? (
-          <Aparecer className="mb-16 text-center">
-            <h2 className="mb-4 text-4xl font-bold text-foreground md:text-5xl">
-              Elegí tu <span className="text-gradient-primary">curso</span>
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">{DESCUENTOS}</p>
+    <section className={`pantalla py-5 ${comoPagina ? 'pt-24' : ''}`} style={{ background: 'var(--fondo-cursos)' }}>
+      <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
+        {conTitulo || comoPagina ? (
+          <Aparecer className="mb-8 text-center">
+            {comoPagina ? (
+              <h1 className="mb-3 text-3xl font-bold text-foreground md:text-4xl">
+                Nuestros <span className="text-gradient-primary">cursos</span>
+              </h1>
+            ) : (
+              <h2 className="mb-3 text-3xl font-bold text-foreground md:text-4xl">
+                Elegí tu <span className="text-gradient-primary">curso</span>
+              </h2>
+            )}
+            <p className="mx-auto max-w-3xl text-base text-muted-foreground">{DESCUENTOS}</p>
           </Aparecer>
-        ) : (
-          <p className="mx-auto mb-16 max-w-2xl text-center text-lg text-muted-foreground">{DESCUENTOS}</p>
-        )}
+        ) : null}
 
         <ul className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
           {CURSOS.map((curso, i) => (
             <li key={curso.nombre}>
               <Aparecer retardo={i * 0.15} className="h-full">
                 <div
-                  className={`relative flex h-full flex-col rounded-2xl bg-card p-8 shadow-card transition-all duration-300 hover:shadow-card-hover ${
+                  className={`relative flex h-full flex-col rounded-2xl bg-card p-6 shadow-card transition-all duration-300 hover:shadow-card-hover ${
                     curso.destacado ? 'scale-[1.02] ring-2 ring-primary' : ''
                   }`}
                 >
@@ -39,12 +46,12 @@ export function TarjetasCursos({ conTitulo = false }: { conTitulo?: boolean }) {
                       Más elegido
                     </span>
                   )}
-                  <h3 className="mb-1 font-heading text-2xl font-bold text-card-foreground">{curso.nombre}</h3>
-                  <p className="mb-6 text-sm text-muted-foreground">{curso.clases} clases prácticas</p>
+                  <h3 className="mb-1 font-heading text-xl font-bold text-card-foreground">{curso.nombre}</h3>
+                  <p className="mb-3 text-sm text-muted-foreground">{curso.clases} clases prácticas</p>
 
-                  <p className="mb-8 text-4xl font-bold text-primary">{formatearPesos(curso.precio)}</p>
+                  <p className="mb-4 text-3xl font-bold text-primary">{formatearPesos(curso.precio)}</p>
 
-                  <ul className="mb-8 space-y-3">
+                  <ul className="mb-5 space-y-2">
                     {INCLUYE.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-sm">
                         <IconoCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-success" />
@@ -56,7 +63,7 @@ export function TarjetasCursos({ conTitulo = false }: { conTitulo?: boolean }) {
                   <Boton
                     href={whatsappUrl(MENSAJES.curso(curso.nombre))}
                     externo
-                    className="mt-auto w-full !rounded-lg !text-base"
+                    className="mt-auto w-full !rounded-lg !py-3 !text-base"
                   >
                     Reservar este curso
                   </Boton>
@@ -66,7 +73,7 @@ export function TarjetasCursos({ conTitulo = false }: { conTitulo?: boolean }) {
           ))}
         </ul>
 
-        <p className="mt-10 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           El examen de manejo no está incluido en el precio.
         </p>
       </div>

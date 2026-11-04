@@ -20,7 +20,7 @@ function Enlaces({ claseLink }: { claseLink: string }) {
 /** Diseño A: pie oscuro como la plantilla. */
 function FooterA() {
   return (
-    <footer className="solo-a bg-foreground text-primary-foreground/80">
+    <footer className="solo-a snap-start bg-foreground text-primary-foreground/80">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
           <div>
@@ -62,7 +62,7 @@ function FooterA() {
 /** Diseño B: pie claro con el logo. */
 function FooterB() {
   return (
-    <footer className="solo-b border-t border-border bg-[#f6ede3]">
+    <footer className="solo-b snap-start border-t border-border bg-[#f6ede3]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3 lg:px-8">
         <div>
           <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} />

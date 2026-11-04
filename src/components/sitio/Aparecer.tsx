@@ -29,7 +29,7 @@ export function Aparecer({
     const el = ref.current;
     if (!el || typeof IntersectionObserver === 'undefined') return;
     // Lo que ya está a la vista (o por encima) se queda como está.
-    if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.8) return;
 
     setEstado('oculto');
     const observer = new IntersectionObserver(
@@ -39,7 +39,8 @@ export function Aparecer({
           observer.disconnect();
         }
       },
-      { threshold: 0.1 },
+      // Arranca cuando el elemento ya está bien adentro de la pantalla (no apenas asoma), para que se vea el movimiento.
+      { threshold: 0.2, rootMargin: '0px 0px -20% 0px' },
     );
     observer.observe(el);
     return () => observer.disconnect();

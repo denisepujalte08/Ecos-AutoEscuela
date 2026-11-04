@@ -8,10 +8,10 @@ const PASOS = [
 
 export function ComoFunciona() {
   return (
-    <section className="bg-section-alt py-24">
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        <Aparecer className="mb-16 text-center">
-          <h2 className="text-4xl font-bold text-foreground md:text-5xl">
+    <section className="pantalla bg-section-alt py-10">
+      <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
+        <Aparecer className="mb-10 text-center">
+          <h2 className="text-3xl font-bold text-foreground md:text-4xl">
             Cómo <span className="text-gradient-primary">reservar</span>
           </h2>
         </Aparecer>

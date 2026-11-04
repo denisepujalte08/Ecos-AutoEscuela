@@ -29,8 +29,8 @@ const VENTAJAS: Ventaja[] = [
 
 export function Ventajas() {
   return (
-    <section className="bg-background py-16">
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+    <section className="pantalla bg-background py-10">
+      <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
         <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {VENTAJAS.map(({ icono: Icono, titulo, texto }, i) => (
             <li key={titulo}>

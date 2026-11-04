@@ -65,6 +65,24 @@
   display: none !important;
 }
 
+/* Desde tablet: cada sección ocupa una pantalla y el scroll se acomoda al llegar a ella. */
+@media (min-width: 768px) {
+  html {
+    scroll-snap-type: y proximity;
+    scroll-padding-top: 5rem;
+  }
+}
+
+@utility pantalla {
+  scroll-snap-align: start;
+  @media (min-width: 768px) {
+    min-height: calc(100svh - 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

@@ -7,7 +7,7 @@ import { MarcoImagen } from './MarcoImagen';
 /** Diseño A: como la plantilla (foto a pantalla completa, degradé y onda blanca). */
 function HeroA() {
   return (
-    <section className="solo-a relative flex min-h-[min(100svh,52rem)] items-center overflow-hidden pb-24 pt-20">
+    <section className="solo-a relative flex snap-start min-h-[min(100svh,52rem)] items-center overflow-hidden pb-24 pt-20">
       <div className="absolute inset-0">
         {/* PROVISORIO: foto de la plantilla. Se reemplaza por una foto real de ECOS. */}
         <Image src="/plantilla/hero.jpg" alt="Foto de portada" fill priority sizes="100vw" className="object-cover" />
@@ -57,7 +57,7 @@ function HeroA() {
 function HeroB() {
   return (
     <section
-      className="solo-b relative flex min-h-[min(100svh,52rem)] items-center overflow-hidden pb-12 pt-28"
+      className="solo-b relative flex snap-start min-h-[min(100svh,52rem)] items-center overflow-hidden pb-12 pt-28"
       style={{ background: 'linear-gradient(180deg, #fff1e3 0%, #fffaf5 100%)' }}
     >
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 lg:grid-cols-2 lg:px-8">

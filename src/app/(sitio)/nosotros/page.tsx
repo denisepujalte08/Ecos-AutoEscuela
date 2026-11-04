@@ -37,8 +37,8 @@ export default function Nosotros() {
         </ul>
       </section>
 
-      <section className="bg-section-alt py-20">
-        <div className="mx-auto max-w-3xl px-4 lg:px-8">
+      <section className="pantalla bg-section-alt py-10">
+        <div className="mx-auto w-full max-w-3xl px-4 lg:px-8">
           <Aparecer>
             <h2 className="mb-6 text-center text-3xl font-bold text-foreground">Cómo son las clases</h2>
             <div className="space-y-4 leading-relaxed text-muted-foreground">
