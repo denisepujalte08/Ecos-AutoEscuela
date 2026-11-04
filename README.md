@@ -11,6 +11,8 @@ Sistema web para vender cursos de manejo, reservar turnos de 40 minutos (un solo
 | [docs/02-pagos.md](docs/02-pagos.md) | Mercado Pago, transferencia, efectivo y Unicobros |
 | [docs/03-preguntas-pendientes.md](docs/03-preguntas-pendientes.md) | Preguntas al cliente y respuestas |
 | [docs/04-roadmap.md](docs/04-roadmap.md) | Qué está hecho y qué sigue |
+| [docs/05-seguridad.md](docs/05-seguridad.md) | Medidas de seguridad hechas y pendientes |
+| [docs/06-devops.md](docs/06-devops.md) | Flujo de trabajo, CI, entornos, migraciones y despliegue |
 
 ## Requisitos
 
@@ -25,7 +27,14 @@ npm run db:start     # levanta Supabase local (Postgres, Auth) en Docker
 npm run db:reset     # aplica migraciones y carga datos de ejemplo
 npm run db:test      # corre los tests de la lógica de reserva (pgTAP)
 npm run dev          # app en http://localhost:3000
+npm run check        # lint + tipos + tests de base de datos (antes de abrir un PR)
 ```
+
+Copiá `.env.example` a `.env.local` para las variables de entorno (nunca se commitea).
+
+## Cómo contribuir
+
+No se hace push a `main`: se trabaja en una rama y se abre un Pull Request. Ver [docs/06-devops.md](docs/06-devops.md).
 
 `npm run db:stop` apaga la base local.
 
