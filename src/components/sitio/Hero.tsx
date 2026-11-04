@@ -7,21 +7,21 @@ import { MarcoImagen } from './MarcoImagen';
 /** Diseño A: como la plantilla (foto a pantalla completa, degradé y onda blanca). */
 function HeroA() {
   return (
-    <section className="solo-a relative flex items-center overflow-hidden py-32 md:py-40 lg:py-48">
+    <section className="solo-a relative flex min-h-[min(100svh,52rem)] items-center overflow-hidden pb-24 pt-20">
       <div className="absolute inset-0">
         {/* PROVISORIO: foto de la plantilla. Se reemplaza por una foto real de ECOS. */}
         <Image src="/plantilla/hero.jpg" alt="Foto de portada" fill priority sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-hero-overlay" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 pt-20 lg:px-8">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-10 lg:px-8">
         <div className="max-w-2xl">
-          <h1 className="animate-fade-up mb-6 text-5xl font-bold leading-tight text-primary-foreground md:text-6xl lg:text-7xl">
+          <h1 className="animate-fade-up mb-5 text-4xl font-bold leading-tight text-primary-foreground sm:text-5xl lg:text-6xl">
             Aprendé a manejar con <span className="text-primary">confianza</span>
           </h1>
 
           <p
-            className="animate-fade-up mb-10 max-w-lg text-lg leading-relaxed text-primary-foreground/80 md:text-xl"
+            className="animate-fade-up mb-8 max-w-lg text-lg leading-relaxed text-primary-foreground/80"
             style={{ animationDelay: '0.15s' }}
           >
             Clases prácticas en auto, de a una por día, con instructores que te acompañan paso a paso. Elegí tu curso
@@ -57,18 +57,18 @@ function HeroA() {
 function HeroB() {
   return (
     <section
-      className="solo-b relative overflow-hidden pb-24 pt-36 md:pb-32 md:pt-44"
+      className="solo-b relative flex min-h-[min(100svh,52rem)] items-center overflow-hidden pb-12 pt-28"
       style={{ background: 'linear-gradient(180deg, #fff1e3 0%, #fffaf5 100%)' }}
     >
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2 lg:px-8">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 lg:grid-cols-2 lg:px-8">
         <div>
           <p className="mb-5 inline-block rounded-full bg-primary/15 px-4 py-1.5 text-sm font-semibold text-primary-dark">
             Escuela de Conducción Segura
           </p>
-          <h1 className="mb-6 text-5xl font-bold leading-tight text-foreground md:text-6xl">
+          <h1 className="mb-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
             Aprendé a manejar con <span className="text-primary">confianza</span>
           </h1>
-          <p className="mb-10 max-w-lg text-lg leading-relaxed text-muted-foreground">
+          <p className="mb-8 max-w-lg text-lg leading-relaxed text-muted-foreground">
             Clases prácticas en auto, de a una por día, con instructores que te acompañan paso a paso. Elegí tu curso
             y coordinamos tus turnos por WhatsApp.
           </p>
@@ -83,7 +83,7 @@ function HeroB() {
           </div>
         </div>
 
-        <MarcoImagen etiqueta="auto de ECOS / alumno al volante" className="aspect-[4/3] w-full" />
+        <MarcoImagen etiqueta="auto de ECOS / alumno al volante" className="aspect-[4/3] max-h-[55svh] w-full" />
       </div>
     </section>
   );
