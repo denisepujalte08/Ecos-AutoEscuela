@@ -17,9 +17,9 @@ insert into instructors (id, nombre) values
 
 -- Lunes a viernes: mañana 08:00-12:00 (6 turnos), tarde 14:00-18:00 (6 turnos)
 insert into availability_rules (instructor_id, weekday, start_time, end_time)
-select 'a0000000-0000-0000-0000-00000000000a', d, '08:00', '12:00' from generate_series(1, 5) d
+select 'a0000000-0000-0000-0000-00000000000a'::uuid, d, '08:00'::time, '12:00'::time from generate_series(1, 5) d
 union all
-select 'b0000000-0000-0000-0000-00000000000b', d, '14:00', '18:00' from generate_series(1, 5) d;
+select 'b0000000-0000-0000-0000-00000000000b'::uuid, d, '14:00'::time, '18:00'::time from generate_series(1, 5) d;
 
 insert into courses (id, nombre, cantidad_clases, precio_lista) values
   ('c3000000-0000-0000-0000-000000000003', 'Curso de 3', 3, 100000),
@@ -117,6 +117,29 @@ select throws_ok(
   'P0001', 'duplicate_slots', 'no se pueden repetir turnos');
 
 -- ---------------------------------------------------------------------------
+-- Sugerencias de horarios alternativos
+-- ---------------------------------------------------------------------------
+select is(
+  (select starts_at from suggest_slots('52000000-0000-0000-0000-000000000002', pg_temp.slot(0, '08:00')) limit 1),
+  pg_temp.slot(0, '08:40'), 'sugiere primero el turno libre más cercano del mismo día');
+
+select is(
+  (select starts_at from suggest_slots('52000000-0000-0000-0000-000000000002', pg_temp.slot(0, '08:00'),
+                                       array[pg_temp.slot(0, '08:40')]) limit 1),
+  pg_temp.slot(1, '08:40'), 'si ya eligió ese día, sugiere el día siguiente (una clase por día)');
+
+select is(
+  (select count(*)::int from suggest_slots('51000000-0000-0000-0000-000000000001', pg_temp.slot(0, '09:00'),
+                                           '{}', 50)
+   where (starts_at at time zone 'America/Argentina/Buenos_Aires')::date = (select monday from ctx)),
+  0, 'no sugiere días en los que el alumno ya tiene clase');
+
+select is(
+  (select count(*)::int from suggest_slots('52000000-0000-0000-0000-000000000002', pg_temp.slot(0, '08:00'),
+                                           '{}', 3)),
+  3, 'respeta el límite de sugerencias');
+
+-- ---------------------------------------------------------------------------
 -- Confirmación
 -- ---------------------------------------------------------------------------
 select confirm_enrollment((select id from e1));
@@ -198,6 +221,8 @@ select throws_ok(
 -- ---------------------------------------------------------------------------
 select is(has_function_privilege('anon', 'create_enrollment(uuid, uuid, payment_method, timestamptz[])', 'execute'),
   false, 'anon no puede crear inscripciones directamente');
+select is(has_function_privilege('anon', 'suggest_slots(uuid, timestamptz, timestamptz[], integer)', 'execute'),
+  false, 'anon no puede pedir sugerencias (recibe el id del alumno)');
 select is(has_function_privilege('anon', 'get_free_slots(date, date)', 'execute'),
   true, 'anon puede consultar turnos libres');
 

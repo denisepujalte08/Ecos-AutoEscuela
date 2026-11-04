@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="1600" height="500" role="img" aria-label="ECOS Escuela de Conducción Segura">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" role="img" aria-label="ECOS Escuela de Conducción Segura">
   <title>ECOS - Escuela de Conducción Segura</title>
   <defs>
     <style>
@@ -8,7 +8,7 @@
   </defs>
 
   <!-- Emblema: media corona negra -->
-  <path class="k" d="M245,15 A211,211 0 1 0 245,437 L245,390 A165,165 0 1 1 245,62 Z"/>
+  <path class="k" d="M245,15 A211,211 0 1 0 245,437 L245,381 A155,155 0 1 1 245,72 Z"/>
 
   <!-- Barra naranja izquierda -->
   <path class="o" d="M110,205 H176 Q172,226 176,247 H110 Z"/>
@@ -35,5 +35,5 @@
   </g>
 
   <!-- Subtítulo -->
-  <text x="510" y="478" class="k" font-family="Eurostile, 'Bank Gothic', 'Arial Narrow', Arial, sans-serif" font-size="68" font-weight="800" font-style="italic" textLength="1030" lengthAdjust="spacingAndGlyphs">ESCUELA DE CONDUCCIÓN SEGURA</text>
+  <text x="510" y="478" class="k" font-family="Eurostile, 'Bank Gothic', 'Arial Narrow', Arial, sans-serif" font-size="68" font-weight="900" font-style="italic" stroke="#000" stroke-width="3" stroke-linejoin="round" textLength="1030" lengthAdjust="spacingAndGlyphs">ESCUELA DE CONDUCCIÓN SEGURA</text>
 </svg>

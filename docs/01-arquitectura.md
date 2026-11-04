@@ -72,6 +72,7 @@ Definidas en `supabase/migrations/20261103000002_booking_functions.sql`.
 | `confirm_enrollment(id)` | servidor | Pago confirmado: retenidas → programadas |
 | `cancel_enrollment(id)` | servidor | Cancela y libera los turnos |
 | `mark_lesson_done(clase, usuario)` | servidor | Administración marca la clase como dictada |
+| `suggest_slots(alumno, deseado, excluidos[], límite)` | servidor | Horarios libres más cercanos al deseado (ver abajo) |
 | `release_expired_holds()` | servidor / cron | Libera retenciones vencidas |
 | `slot_candidates(desde, hasta)` | interno | Turnos posibles antes de mirar ocupación |
 
@@ -83,6 +84,14 @@ Definidas en `supabase/migrations/20261103000002_booking_functions.sql`.
 4. Se descartan los ocupados (`scheduled`, `done`) o retenidos vigentes (`held` con `hold_expires_at > now()`).
 
 El profesor **no se elige**: sale de la regla que genera el turno.
+
+### Horarios alternativos
+
+Si un turno elegido ya no está libre, `create_enrollment` falla entera (todo o nada) con `slot_taken` o `slot_unavailable` y el detalle indica cuál. La aplicación llama a `suggest_slots` con ese horario y muestra las opciones más cercanas; el alumno elige un reemplazo y reintenta.
+
+- Ordena por cercanía en minutos: primero la misma jornada, luego los días vecinos (±7 días).
+- Respeta una clase por día: descarta días en que el alumno ya tiene clase y días de los turnos que ya eligió en la reserva en curso (`p_exclude`).
+- No reserva nada: solo sugiere. La reserva sigue siendo atómica.
 
 ### Retención de turnos
 
