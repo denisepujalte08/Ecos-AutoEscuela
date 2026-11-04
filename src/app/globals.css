@@ -48,12 +48,14 @@
   --color-secondary: #141414;
   --color-muted-foreground: #6b6560;
   --color-border: #eadfd2;
-  --cta-fondo: #141414;
+  --cta-fondo: linear-gradient(135deg, #ff8a2a, #fb6d00);
+  --cta-texto: #141414;
   --fondo-cursos: #f6ede3;
 }
 
 :root {
   --cta-fondo: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  --cta-texto: #ffffff;
   --fondo-cursos: var(--color-background);
 }
 

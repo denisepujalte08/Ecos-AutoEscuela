@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { IconoWhatsApp } from './iconos';
 
-type Variante = 'primario' | 'vidrio' | 'blanco' | 'contornoClaro';
+type Variante = 'primario' | 'vidrio' | 'contorno' | 'blanco' | 'contornoClaro';
 type Tamano = 'normal' | 'grande';
 
 const BASE =
@@ -11,8 +11,9 @@ const BASE =
 const VARIANTES: Record<Variante, string> = {
   primario: 'bg-primary text-on-primary hover:bg-primary-dark shadow-lg',
   vidrio: 'border-2 border-white/40 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20',
+  contorno: 'border-2 border-foreground/20 text-foreground hover:bg-foreground/5',
   blanco: 'bg-white text-primary-dark shadow-lg hover:bg-white/90',
-  contornoClaro: 'border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10',
+  contornoClaro: 'border-2 border-current/30 text-[var(--cta-texto)] hover:bg-black/5',
 };
 
 const TAMANOS: Record<Tamano, string> = {

@@ -53,19 +53,22 @@ function HeroA() {
   );
 }
 
-/** Diseño B: portada oscura dividida en dos, con marco para la foto. */
+/** Diseño B: portada clara dividida en dos, con marco para la foto. */
 function HeroB() {
   return (
-    <section className="solo-b relative overflow-hidden bg-secondary pb-24 pt-36 text-white md:pb-32 md:pt-44">
+    <section
+      className="solo-b relative overflow-hidden pb-24 pt-36 md:pb-32 md:pt-44"
+      style={{ background: 'linear-gradient(180deg, #fff1e3 0%, #fffaf5 100%)' }}
+    >
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2 lg:px-8">
         <div>
-          <p className="mb-5 inline-block rounded-full bg-primary/15 px-4 py-1.5 text-sm font-semibold text-primary">
+          <p className="mb-5 inline-block rounded-full bg-primary/15 px-4 py-1.5 text-sm font-semibold text-primary-dark">
             Escuela de Conducción Segura
           </p>
-          <h1 className="mb-6 text-5xl font-bold leading-tight md:text-6xl">
+          <h1 className="mb-6 text-5xl font-bold leading-tight text-foreground md:text-6xl">
             Aprendé a manejar con <span className="text-primary">confianza</span>
           </h1>
-          <p className="mb-10 max-w-lg text-lg leading-relaxed text-white/80">
+          <p className="mb-10 max-w-lg text-lg leading-relaxed text-muted-foreground">
             Clases prácticas en auto, de a una por día, con instructores que te acompañan paso a paso. Elegí tu curso
             y coordinamos tus turnos por WhatsApp.
           </p>
@@ -73,17 +76,14 @@ function HeroB() {
             <Boton href={whatsappUrl(MENSAJES.consulta)} externo>
               Reservar por WhatsApp
             </Boton>
-            <Boton href="/cursos" variante="vidrio">
+            <Boton href="/cursos" variante="contorno">
               Ver cursos
               <IconoFlecha className="h-5 w-5" />
             </Boton>
           </div>
         </div>
 
-        <MarcoImagen
-          etiqueta="auto de ECOS / alumno al volante"
-          className="aspect-[4/3] w-full !border-white/20 !bg-white/5 !text-white/60"
-        />
+        <MarcoImagen etiqueta="auto de ECOS / alumno al volante" className="aspect-[4/3] w-full" />
       </div>
     </section>
   );
