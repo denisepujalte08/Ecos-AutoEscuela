@@ -18,7 +18,7 @@ Cómo está hecho: los colores cambian con el atributo `data-diseno` de `<html>`
 Se tomó la estructura y el estilo de la plantilla de Lovable "Pet Resort Page" (secciones, tarjetas, estilo cálido), pero **reescrita para Next.js 16 y Tailwind 4** y sin las dependencias de la plantilla (shadcn/ui, framer-motion, react-router, lucide). Los íconos son SVG propios en `src/components/sitio/iconos.tsx`.
 
 - **Paleta A:** dorado y crema de la plantilla. **Paleta B:** el naranja `#FB6D00` y el negro del logo de ECOS, con texto oscuro sobre los botones naranjas (mejor contraste que el blanco).
-- **Fuentes:** Fredoka (títulos) e Inter (texto), con `next/font`.
+- **Fuentes:** Poppins (títulos) e Inter (texto), con `next/font`. La plantilla traía Fredoka (redondeada); se cambió por pedido. Para probar otra, se cambia en `src/app/layout.tsx`.
 - **Fotos:** todavía no hay fotos de ECOS. El diseño A usa **provisoriamente la foto de portada de la plantilla** (`public/plantilla/hero.jpg`, un perro): hay que reemplazarla. En el diseño B, el lugar de la foto es un `MarcoImagen` (marco vacío).
 
 ## Reservas por WhatsApp (etapa actual)

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fredoka, Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -8,10 +8,11 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
+// Tipografía de los títulos. Para cambiarla, reemplazar Poppins por otra fuente de next/font/google.
+const titulos = Poppins({
+  variable: "--font-titulos",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es-AR"
       data-diseno="a"
       suppressHydrationWarning
-      className={`${inter.variable} ${fredoka.variable} h-full antialiased`}
+      className={`${inter.variable} ${titulos.variable} h-full antialiased`}
     >
       <head>
         {/* Aplica el diseño elegido antes de pintar, para que no parpadee. Se va con el selector. */}
