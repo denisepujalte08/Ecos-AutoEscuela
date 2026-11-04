@@ -2,7 +2,7 @@
   <title>Emblema ECOS</title>
 
   <!-- Media corona negra (centro 800,800 · radio ext. 722 · radio int. 537) -->
-  <path fill="#000" d="M747,80 A722,722 0 1 0 747,1520 L747,1334 A537,537 0 1 1 747,266 Z"/>
+  <path fill="#000" d="M747,80 A722,722 0 0 0 747,1520 L747,1334 A537,537 0 0 1 747,266 Z"/>
 
   <!-- Barra naranja izquierda -->
   <path fill="#FB6D00" d="M292,724 H514 A296,296 0 0 0 514,875 H292 A514,514 0 0 1 292,724 Z"/>

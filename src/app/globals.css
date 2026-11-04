@@ -1,51 +1,100 @@
 @import "tailwindcss";
 
-/* Paleta de ECOS: naranja y negro del logo sobre fondo crema (estilo de la plantilla). */
-:root {
-  --background: #fffaf5;
-  --foreground: #1a1a1a;
-  --card: #ffffff;
-  --muted: #6b6560;
-  --crema: #f6ede3;
-  --borde: #eadfd2;
-  --primary: #fb6d00;
-  --primary-dark: #d95a00;
-  --ink: #141414;
+/* Paleta de la plantilla: dorado sobre crema, con negro para contraste. */
+@theme {
+  --color-background: hsl(30 100% 99%);
+  --color-foreground: hsl(0 0% 18%);
+  --color-card: hsl(30 100% 99%);
+  --color-card-foreground: hsl(0 0% 18%);
+  --color-primary: hsl(36 58% 58%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  /* Color del texto sobre botones y círculos de color primario. */
+  --color-on-primary: hsl(0 0% 100%);
+  --color-primary-dark: hsl(36 52% 48%);
+  --color-secondary: hsl(0 0% 10%);
+  --color-muted-foreground: hsl(0 0% 42%);
+  --color-border: hsl(30 20% 90%);
+  --color-success: hsl(122 39% 49%);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-heading: var(--font-fredoka), system-ui, sans-serif;
+
+  --shadow-card: 0 4px 24px -4px hsl(0 0% 18% / 0.08);
+  --shadow-card-hover: 0 12px 40px -8px hsl(0 0% 18% / 0.15);
+
+  --animate-fade-up: fade-up 0.7s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-muted: var(--muted);
-  --color-crema: var(--crema);
-  --color-borde: var(--borde);
-  --color-primary: var(--primary);
-  --color-primary-dark: var(--primary-dark);
-  --color-ink: var(--ink);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-fredoka);
-  --shadow-card: 0 4px 24px -4px rgb(26 26 26 / 0.08);
-  --shadow-card-hover: 0 12px 40px -8px rgb(26 26 26 / 0.16);
+/* Diseño B: el primero que armamos (naranja y negro del logo, portada oscura). */
+:root[data-diseno="b"] {
+  --color-background: #fffaf5;
+  --color-foreground: #1a1a1a;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-primary: #fb6d00;
+  --color-primary-dark: #d95a00;
+  --color-on-primary: #141414;
+  --color-secondary: #141414;
+  --color-muted-foreground: #6b6560;
+  --color-border: #eadfd2;
+  --cta-fondo: #141414;
+  --fondo-cursos: #f6ede3;
+}
+
+:root {
+  --cta-fondo: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  --fondo-cursos: var(--color-background);
+}
+
+/* Elementos que existen solo en uno de los dos diseños. */
+:root[data-diseno="a"] .solo-b,
+:root[data-diseno="b"] .solo-a {
+  display: none !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-fredoka), system-ui, sans-serif;
+  font-family: var(--font-heading);
 }
 
-/* Quien prefiere menos movimiento no ve transiciones. */
+@utility text-gradient-primary {
+  background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility bg-hero-overlay {
+  background: linear-gradient(135deg, hsl(0 0% 10% / 0.55), hsl(30 20% 15% / 0.6));
+}
+
+@utility bg-section-alt {
+  background: linear-gradient(180deg, hsl(30 100% 99%) 0%, hsl(30 33% 93%) 100%);
+}
+
+/* Quien prefiere menos movimiento no ve animaciones. */
 @media (prefers-reduced-motion: reduce) {
   * {
-    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

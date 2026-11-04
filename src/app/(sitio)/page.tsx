@@ -9,7 +9,7 @@ export default function Inicio() {
     <>
       <Hero />
       <Ventajas />
-      <TarjetasCursos />
+      <TarjetasCursos conTitulo />
       <ComoFunciona />
       <LlamadoFinal />
     </>

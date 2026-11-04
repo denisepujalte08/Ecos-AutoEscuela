@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { ComoFunciona } from '@/components/sitio/ComoFunciona';
+import { EncabezadoPagina } from '@/components/sitio/EncabezadoPagina';
 import { LlamadoFinal } from '@/components/sitio/LlamadoFinal';
 import { TarjetasCursos } from '@/components/sitio/TarjetasCursos';
 
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 export default function Cursos() {
   return (
     <>
-      <div className="pt-20">
-        <TarjetasCursos titulo="Nuestros cursos" />
-      </div>
+      <EncabezadoPagina titulo="Nuestros" resaltado="cursos">
+        Clases prácticas de 40 minutos, de a una por día. Elegí cuántas necesitás.
+      </EncabezadoPagina>
+      <TarjetasCursos />
       <ComoFunciona />
       <LlamadoFinal />
     </>

@@ -11,7 +11,7 @@ const inter = Inter({
 const fredoka = Fredoka({
   variable: "--font-fredoka",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +21,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-AR" className={`${inter.variable} ${fredoka.variable} h-full antialiased`}>
+    <html
+      lang="es-AR"
+      data-diseno="a"
+      suppressHydrationWarning
+      className={`${inter.variable} ${fredoka.variable} h-full antialiased`}
+    >
+      <head>
+        {/* Aplica el diseño elegido antes de pintar, para que no parpadee. Se va con el selector. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var d=localStorage.getItem('ecos-diseno');if(d==='a'||d==='b')document.documentElement.dataset.diseno=d}catch(e){}",
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
