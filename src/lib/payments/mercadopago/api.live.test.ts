@@ -34,7 +34,7 @@ describe.skipIf(process.env.MP_LIVE !== '1')('Mercado Pago (entorno de pruebas r
     expect(order.id).toBeTruthy();
     expect(order.checkoutUrl).toMatch(/^https:\/\//);
     // La URL no es secreta: sirve para pagar la orden de prueba con la cuenta compradora.
-    console.log(`\n>>> URL DE PAGO DE PRUEBA: ${order.checkoutUrl}\n>>> ID DE ORDEN: ${order.id}\n`);
+    process.stdout.write(`\n>>> URL DE PAGO DE PRUEBA: ${order.checkoutUrl}\n>>> ID DE ORDEN: ${order.id}\n`);
   });
 
   it('repetir la petición con la misma clave de idempotencia devuelve la misma orden', async () => {
@@ -42,9 +42,34 @@ describe.skipIf(process.env.MP_LIVE !== '1')('Mercado Pago (entorno de pruebas r
     expect(again.id).toBe(order.id);
   });
 
+  it.skipIf(!process.env.MP_ORDER_ID)('consulta una orden existente (MP_ORDER_ID) y muestra su estado', async () => {
+    const o = await getOrder(String(process.env.MP_ORDER_ID));
+    const raw = o.raw as { status?: string; status_detail?: string; total_paid_amount?: string; transactions?: { payments?: { status?: string; status_detail?: string }[] } };
+    process.stdout.write(
+      `>>> Orden ${o.id}: ${JSON.stringify({
+        status: raw.status,
+        status_detail: raw.status_detail,
+        total_paid_amount: raw.total_paid_amount,
+        pagos: raw.transactions?.payments?.map((p) => ({ status: p.status, status_detail: p.status_detail })),
+        traducido_a: o.status,
+        monto_que_usariamos: o.amount,
+      })}\n`,
+    );
+    expect(o.id).toBe(process.env.MP_ORDER_ID);
+  });
+
   it('la orden se consulta: pendiente, en pesos y con nuestra referencia', async () => {
     const o = await getOrder(order.id);
-    console.log(`>>> Estado inicial de la orden: ${JSON.stringify({ status: (o.raw as Record<string, unknown>).status, status_detail: (o.raw as Record<string, unknown>).status_detail, currency: o.currency, amount: o.amount })}`);
+    const raw = o.raw as Record<string, unknown>;
+    process.stdout.write(
+      `>>> Orden en Mercado Pago: ${JSON.stringify({
+        status: raw.status,
+        status_detail: raw.status_detail,
+        currency: o.currency,
+        amount: o.amount,
+        expiration_time: raw.expiration_time,
+      })}\n`,
+    );
     expect(o.status).toBe('pending');
     expect(o.currency).toBe('ARS');
     expect(o.amount).toBe(100);
