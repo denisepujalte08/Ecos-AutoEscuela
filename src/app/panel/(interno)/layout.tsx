@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Suspense, type ReactNode } from 'react';
 import { exigirPersonal } from '@/lib/auth/personal';
 import { cerrarSesion } from './actions';
@@ -24,7 +25,16 @@ async function Marco({ children }: { children: ReactNode }) {
     <div className="min-h-screen" style={{ background: 'var(--fondo-cursos)' }}>
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <Image src="/logo-ecos-solo.svg" alt="ECOS" width={104} height={31} loading="eager" className="h-auto w-24" />
+          <div className="flex items-center gap-6">
+            <Link href="/panel" aria-label="Inicio del panel">
+              <Image src="/logo-ecos-solo.svg" alt="ECOS" width={104} height={31} loading="eager" className="h-auto w-24" />
+            </Link>
+            <nav aria-label="Panel" className="text-sm font-semibold">
+              <Link href="/panel/pedidos" className="hover:text-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                Pedidos
+              </Link>
+            </nav>
+          </div>
           <div className="flex items-center gap-4 text-sm">
             <span className="hidden text-muted-foreground sm:inline">
               {personal.email} · {personal.rol === 'owner' ? 'Dueño' : 'Administración'}

@@ -246,9 +246,10 @@ otp_expiry = 3600
 # sender_name = "Admin"
 
 # Uncomment to customize email template
-# [auth.email.template.invite]
-# subject = "You have been invited"
-# content_path = "./supabase/templates/invite.html"
+# Mail que recibe el alumno cuando el personal lo da de alta (en castellano).
+[auth.email.template.invite]
+subject = "Tu acceso a ECOS Autoescuela"
+content_path = "./supabase/templates/invite.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]

@@ -72,8 +72,11 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        © {SITE.nombreCompleto}. Todos los derechos reservados.
+      <div className="flex flex-col items-center gap-2 border-t border-border py-6 text-center text-xs text-muted-foreground">
+        <p>© {SITE.nombreCompleto}. Todos los derechos reservados.</p>
+        <Link href="/panel/login" className="underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          Acceso
+        </Link>
       </div>
     </footer>
   );
