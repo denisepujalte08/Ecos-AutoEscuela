@@ -15,11 +15,16 @@ export const BOOKING_ERROR_CODES = [
   'enrollment_not_found_or_cancelled',
   'lesson_not_scheduled',
   'holds_lost',
-  // reserva desde la web (create_web_reservation)
+  // compra desde la web (create_web_purchase, confirm_payment, schedule_enrollment)
   'invalid_name',
   'invalid_phone',
+  'invalid_dni',
   'invalid_email',
-  'too_many_pending',
+  'invalid_method',
+  'enrollment_in_progress',
+  'enrollment_has_lessons',
+  'enrollment_not_active',
+  'already_scheduled',
 ] as const;
 
 export type BookingErrorCode = (typeof BOOKING_ERROR_CODES)[number];
@@ -35,7 +40,13 @@ export class BookingError extends Error {
 
   /** Datos mal cargados en el formulario: se resuelven pidiéndole a la persona que los corrija. */
   get isDataProblem() {
-    return this.code === 'invalid_name' || this.code === 'invalid_phone' || this.code === 'invalid_email';
+    return (
+      this.code === 'invalid_name' ||
+      this.code === 'invalid_phone' ||
+      this.code === 'invalid_dni' ||
+      this.code === 'invalid_email' ||
+      this.code === 'invalid_method'
+    );
   }
 
   /** Errores que se resuelven pidiéndole al alumno que elija otro horario. */

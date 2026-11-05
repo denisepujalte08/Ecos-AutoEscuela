@@ -15,12 +15,17 @@
 
 - [x] Pagos con Mercado Pago (backend): `apply_payment` idempotente, webhook con firma, link de pago y bitácora, con 32 tests de base y 42 unitarios. Falta probarlo contra Mercado Pago de prueba (necesita credenciales).
 
+- [x] Compra desde la web sin pago online, parte de base y servidor: `create_web_purchase`, `confirm_payment` y `schedule_enrollment`, con 45 tests de base nuevos (181 en total) y 17 unitarios (`docs/08-compra-web.md`).
+
 ## Próximo
 1. ~~Políticas RLS por rol~~ (hecho).
 2. ~~Cliente Supabase y tipos~~ (hecho).
 3. **Avisar a Denise antes de empezar el front:** tiene una plantilla elegida.
 4. **Cliente de Supabase en Next.js** (servidor y navegador) y tipos generados.
-3. **Pantalla de reserva** (elegir curso → turnos libres → datos → método de pago).
+3. **Compra desde la web** (pagar primero, elegir turnos después; ver `docs/08-compra-web.md`), en PRs chicos:
+   1. Pantalla "Comprar curso" → WhatsApp.
+   2. Panel del personal: login, pedidos pendientes, confirmar pago, dar de alta al alumno con aviso por mail.
+   3. Panel del alumno: login, completar ficha, elegir turnos y reprogramarlos.
 4. **Mercado Pago:** ~~orden y webhook~~ (hecho con la API de Orders); falta probarlo con credenciales de prueba y armar la página de retorno `/reserva/resultado`.
 5. **Panel admin:** agenda del día con número de clase, marcar clase dictada, pagos pendientes con comprobante, bloqueos, reservas manuales.
 6. **Mi cuenta** del alumno y reprogramación (reglas según respuestas del cliente).

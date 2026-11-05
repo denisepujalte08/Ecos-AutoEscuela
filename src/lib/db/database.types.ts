@@ -227,14 +227,14 @@ isOneToOne: false
                   ]
                 },"students": {
                   Row: {
-                    "created_at": string,"dni": string | null,"email": string | null,"fecha_nacimiento": string | null,"id": string,"nombre_completo": string,"telefono": string,"tutor": Json | null,"user_id": string | null
+                    "created_at": string,"dni": string,"email": string,"fecha_nacimiento": string | null,"id": string,"nombre_completo": string,"telefono": string,"tutor": Json | null,"user_id": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"dni"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"id"?: string,"nombre_completo": string,"telefono": string,"tutor"?: Json | null,"user_id"?: string | null
+                    "created_at"?: string,"dni": string,"email": string,"fecha_nacimiento"?: string | null,"id"?: string,"nombre_completo": string,"telefono": string,"tutor"?: Json | null,"user_id"?: string | null
                   }
                   Update: {
-                    "created_at"?: string,"dni"?: string | null,"email"?: string | null,"fecha_nacimiento"?: string | null,"id"?: string,"nombre_completo"?: string,"telefono"?: string,"tutor"?: Json | null,"user_id"?: string | null
+                    "created_at"?: string,"dni"?: string,"email"?: string,"fecha_nacimiento"?: string | null,"id"?: string,"nombre_completo"?: string,"telefono"?: string,"tutor"?: Json | null,"user_id"?: string | null
                   }
                   Relationships: [
                     
@@ -271,11 +271,14 @@ isOneToOne: false
 "confirm_enrollment":
 { Args: { "p_enrollment_id": string }; Returns: undefined
                            },
+"confirm_payment":
+{ Args: { "p_enrollment_id": string }; Returns: undefined
+                           },
 "create_enrollment":
 { Args: { "p_course_id": string,"p_metodo": Database["public"]['Enums']["payment_method"],"p_starts": (string)[],"p_student_id": string }; Returns: string
                            },
-"create_web_reservation":
-{ Args: { "p_course_id": string,"p_email": string,"p_nombre": string,"p_starts": (string)[],"p_telefono": string }; Returns: string
+"create_web_purchase":
+{ Args: { "p_course_id": string,"p_dni": string,"p_email": string,"p_metodo": Database["public"]['Enums']["payment_method"],"p_nombre": string,"p_telefono": string }; Returns: string
                            },
 "get_free_slots":
 { Args: { "p_from": string,"p_to": string }; Returns: {
@@ -300,6 +303,9 @@ isOneToOne: false
 "release_expired_holds":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
+"schedule_enrollment":
+{ Args: { "p_enrollment_id": string,"p_starts": (string)[] }; Returns: undefined
+                           },
 "slot_candidates":
 { Args: { "p_from": string,"p_to": string }; Returns: {
               "ends_at": string,"instructor_id": string,"starts_at": string
@@ -312,7 +318,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "enrollment_status": "pending_payment"|"pending_review"|"active"|"completed"|"cancelled","lesson_kind": "clase"|"examen","lesson_status": "held"|"scheduled"|"done"|"cancelled"|"no_show","payment_method": "tarjeta"|"transferencia"|"efectivo"|"a_coordinar","user_role": "admin"|"owner"|"student"
+            "enrollment_status": "pending_payment"|"pending_review"|"active"|"completed"|"cancelled","lesson_kind": "clase"|"examen","lesson_status": "held"|"scheduled"|"done"|"cancelled"|"no_show","payment_method": "tarjeta"|"transferencia"|"efectivo","user_role": "admin"|"owner"|"student"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -432,7 +438,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "enrollment_status": ["pending_payment", "pending_review", "active", "completed", "cancelled"],"lesson_kind": ["clase", "examen"],"lesson_status": ["held", "scheduled", "done", "cancelled", "no_show"],"payment_method": ["tarjeta", "transferencia", "efectivo", "a_coordinar"],"user_role": ["admin", "owner", "student"]
+            "enrollment_status": ["pending_payment", "pending_review", "active", "completed", "cancelled"],"lesson_kind": ["clase", "examen"],"lesson_status": ["held", "scheduled", "done", "cancelled", "no_show"],"payment_method": ["tarjeta", "transferencia", "efectivo"],"user_role": ["admin", "owner", "student"]
           }
         }
 } as const

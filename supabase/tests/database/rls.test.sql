@@ -100,7 +100,7 @@ select pg_temp.try('anon_free_slots',  'select 1 from get_free_slots(current_dat
 reset role;
 
 select is((select v from rls_res where k = 'anon_courses'), 1::bigint, 'público: ve solo los cursos activos');
-select is((select v from rls_res where k = 'anon_rules'), 4::bigint, 'público: ve las reglas de descuento (tarjeta, transferencia, efectivo y a coordinar)');
+select is((select v from rls_res where k = 'anon_rules'), 3::bigint, 'público: ve las reglas de descuento');
 select is((select v from rls_res where k = 'anon_students'),    -1::bigint, 'público: no puede leer alumnos');
 select is((select v from rls_res where k = 'anon_enrollments'), -1::bigint, 'público: no puede leer inscripciones');
 select is((select v from rls_res where k = 'anon_lessons'),     -1::bigint, 'público: no puede leer clases');
