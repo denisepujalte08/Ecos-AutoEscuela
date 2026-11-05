@@ -23,13 +23,13 @@ export const metadata: Metadata = {
 
 /**
  * Cortina de bienvenida: una pantalla crema con el logo que se revela y sube (estilos: .cortina-ecos en globals.css).
- * Solo en escritorio, una vez por sesión, en la portada, y nunca con movimiento reducido,
+ * Solo en escritorio, una vez por sesión, en la portada (también con `#inicio`, que es a donde lleva el logo; con cualquier otra sección no), y nunca con movimiento reducido,
  * conexión lenta o ahorro de datos. Se pone encima de la página ya pintada, antes de que cargue React,
  * para no demorarla ni hacerla parpadear.
  */
 const CORTINA_ENTRADA = `(function(){try{
 var w=window,c=navigator.connection||{},k='ecos-intro-visto';
-if(['/','/c','/d'].indexOf(w.location.pathname)<0||w.location.hash||w.innerWidth<768||c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||'')||w.matchMedia('(prefers-reduced-motion: reduce)').matches||w.sessionStorage.getItem(k))return;
+if(['/','/c','/d'].indexOf(w.location.pathname)<0||(w.location.hash&&w.location.hash!=='#inicio')||w.innerWidth<768||c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||'')||w.matchMedia('(prefers-reduced-motion: reduce)').matches||w.sessionStorage.getItem(k))return;
 w.sessionStorage.setItem(k,'1');
 var d=document.createElement('div');d.className='cortina-ecos';var h=document.documentElement;h.classList.add('con-cortina');var q=function(){d.remove();h.classList.remove('con-cortina')};setTimeout(q,2500);d.setAttribute('aria-hidden','true');
 d.innerHTML='<img src="/logo-ecos-solo.svg" alt="" width="260" height="78">';

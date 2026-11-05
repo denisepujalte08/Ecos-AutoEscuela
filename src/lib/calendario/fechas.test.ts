@@ -112,3 +112,39 @@ describe('franjas', () => {
     expect(hayCorteEntre('08:00', '08:40')).toBe(false);
   });
 });
+
+describe('edad y fechas locales', () => {
+  it('fechaLocal usa el día de Argentina', async () => {
+    const { fechaLocal } = await import('./fechas');
+    expect(fechaLocal('2026-11-06T02:30:00Z')).toBe('2026-11-05');
+    expect(fechaLocal('2026-11-06T03:00:00Z')).toBe('2026-11-06');
+  });
+
+  it('edadEn cuenta los años cumplidos, incluso el día del cumpleaños', async () => {
+    const { edadEn } = await import('./fechas');
+    expect(edadEn('2008-11-05', '2026-11-05')).toBe(18);
+    expect(edadEn('2008-11-06', '2026-11-05')).toBe(17);
+    expect(edadEn('2000-02-29', '2026-02-28')).toBe(25);
+    expect(edadEn('2000-02-29', '2026-03-01')).toBe(26);
+  });
+
+  it('esMenorDeEdad: menor hasta el día anterior a cumplir 18', async () => {
+    const { esMenorDeEdad } = await import('./fechas');
+    expect(esMenorDeEdad('2008-11-06', '2026-11-05')).toBe(true);
+    expect(esMenorDeEdad('2008-11-05', '2026-11-05')).toBe(false);
+  });
+
+  it('rotuloFecha', async () => {
+    const { rotuloFecha } = await import('./fechas');
+    expect(rotuloFecha('2026-11-05')).toBe('jueves 5 de noviembre');
+    expect(rotuloFecha('2026-11-07')).toBe('sábado 7 de noviembre');
+  });
+});
+
+describe('conMayuscula', () => {
+  it('solo cambia la primera letra', async () => {
+    const { conMayuscula } = await import('./fechas');
+    expect(conMayuscula('jueves 5 de noviembre')).toBe('Jueves 5 de noviembre');
+    expect(conMayuscula('')).toBe('');
+  });
+});

@@ -17,7 +17,7 @@ export function Footer() {
             Clases prácticas de manejo con instructores profesionales.
           </p>
           <Link
-            href="/panel/login"
+            href="/cuenta/entrar"
             className="mt-4 inline-block text-sm font-semibold text-primary-dark underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             Acceso
