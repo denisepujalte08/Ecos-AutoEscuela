@@ -227,14 +227,14 @@ isOneToOne: false
                   ]
                 },"students": {
                   Row: {
-                    "created_at": string,"dni": string,"email": string,"fecha_nacimiento": string,"id": string,"nombre_completo": string,"telefono": string,"tutor": Json | null,"user_id": string | null
+                    "created_at": string,"dni": string,"email": string,"fecha_nacimiento": string | null,"id": string,"nombre_completo": string,"telefono": string,"tutor": Json | null,"user_id": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"dni": string,"email": string,"fecha_nacimiento": string,"id"?: string,"nombre_completo": string,"telefono": string,"tutor"?: Json | null,"user_id"?: string | null
+                    "created_at"?: string,"dni": string,"email": string,"fecha_nacimiento"?: string | null,"id"?: string,"nombre_completo": string,"telefono": string,"tutor"?: Json | null,"user_id"?: string | null
                   }
                   Update: {
-                    "created_at"?: string,"dni"?: string,"email"?: string,"fecha_nacimiento"?: string,"id"?: string,"nombre_completo"?: string,"telefono"?: string,"tutor"?: Json | null,"user_id"?: string | null
+                    "created_at"?: string,"dni"?: string,"email"?: string,"fecha_nacimiento"?: string | null,"id"?: string,"nombre_completo"?: string,"telefono"?: string,"tutor"?: Json | null,"user_id"?: string | null
                   }
                   Relationships: [
                     
@@ -271,8 +271,14 @@ isOneToOne: false
 "confirm_enrollment":
 { Args: { "p_enrollment_id": string }; Returns: undefined
                            },
+"confirm_payment":
+{ Args: { "p_enrollment_id": string }; Returns: undefined
+                           },
 "create_enrollment":
 { Args: { "p_course_id": string,"p_metodo": Database["public"]['Enums']["payment_method"],"p_starts": (string)[],"p_student_id": string }; Returns: string
+                           },
+"create_web_purchase":
+{ Args: { "p_course_id": string,"p_dni": string,"p_email": string,"p_metodo": Database["public"]['Enums']["payment_method"],"p_nombre": string,"p_telefono": string }; Returns: string
                            },
 "get_free_slots":
 { Args: { "p_from": string,"p_to": string }; Returns: {
@@ -296,6 +302,9 @@ isOneToOne: false
                            },
 "release_expired_holds":
 { Args: Record<PropertyKey, never>; Returns: number
+                           },
+"schedule_enrollment":
+{ Args: { "p_enrollment_id": string,"p_starts": (string)[] }; Returns: undefined
                            },
 "slot_candidates":
 { Args: { "p_from": string,"p_to": string }; Returns: {

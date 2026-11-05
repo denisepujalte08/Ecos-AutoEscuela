@@ -22,6 +22,7 @@ Se actualiza a medida que el cliente responde. La numeración es estable: no se 
 | 9* | Feriados | No trabajan; vacaciones sin saber |
 | 11* | Menores | Suponen que necesitan autorización |
 | 14* | Pago | Suponen pago completo |
+| 15* | Orden en transferencia y efectivo | Opinión de Denise: pagar primero y elegir turnos después (el cliente todavía no respondió) |
 | 21* | Cancelación del profesor | Rara; por enfermedad o por examen; aviso por WhatsApp |
 
 (*) Respuestas tentativas, a confirmar con el cliente.
@@ -62,6 +63,7 @@ La numeración se mantiene. **Bloqueantes:** 2, 9, 10, 15, 23, 25, 26 y 60.
 59. ¿Qué comisión y qué plazo de acreditación les ofrece Unicobros en tarjeta, y ofrecen cuotas sin interés? ¿Cuánto absorberían del costo de las cuotas?
 60. ¿Pueden pedirle a Unicobros las credenciales de API, la documentación técnica y un entorno de pruebas para un sitio web con checkout y webhooks?
 62. ¿Les interesaría que las transferencias se confirmen automáticamente, sin revisión manual? (Requiere un proveedor adicional y probablemente un costo por operación.)
+63. Si alguien pide un curso y no paga, ¿cuánto tiempo puede quedar el pedido pendiente antes de cancelarse (ej. 3 días)?
 
 ### D. Examen de manejo
 23. ¿Ellos gestionan el turno del examen en el municipio, o solo acompañan?
