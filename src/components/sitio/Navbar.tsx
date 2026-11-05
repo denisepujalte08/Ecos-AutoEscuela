@@ -49,7 +49,7 @@ export function Navbar() {
           className={`mx-auto transition-all duration-300 ${
             flotante
               ? 'max-w-6xl rounded-2xl border border-border/60 bg-background/90 shadow-xl backdrop-blur-lg [[data-diseno=b]_&]:bg-background/95'
-              : 'max-w-full border-b border-border/50 bg-background/80 backdrop-blur-lg [[data-diseno=b]_&]:bg-background/95'
+              : 'max-w-full border-b border-border/50 bg-background/80 backdrop-blur-lg [[data-diseno=b]_&]:border-transparent [[data-diseno=b]_&]:bg-transparent [[data-diseno=b]_&]:backdrop-blur-none'
           }`}
         >
           <nav
