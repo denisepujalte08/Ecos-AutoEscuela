@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "personal:crear": "node --env-file=.env.local scripts/crear-personal.mjs",
     "db:start": "supabase start",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
@@ -20,6 +21,7 @@
     "db:types": "supabase gen types typescript --local > src/lib/db/database.types.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.118.0",
     "next": "16.4.5",
     "react": "19.3.1",
