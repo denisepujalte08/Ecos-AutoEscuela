@@ -156,6 +156,11 @@ h4 {
   }
 }
 
+/* Mientras la cortina cubre la página, la animación de entrada espera para que se vea. */
+.con-cortina .animate-fade-up {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cortina-ecos {
     display: none;

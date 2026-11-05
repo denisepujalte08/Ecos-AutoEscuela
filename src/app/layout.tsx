@@ -30,10 +30,10 @@ const CORTINA_ENTRADA = `(function(){try{
 var w=window,c=navigator.connection||{},k='ecos-intro-visto';
 if(document.documentElement.getAttribute('data-diseno')!=='b'||w.location.pathname!=='/'||w.location.hash||w.innerWidth<768||c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||'')||w.matchMedia('(prefers-reduced-motion: reduce)').matches||w.sessionStorage.getItem(k))return;
 w.sessionStorage.setItem(k,'1');
-var d=document.createElement('div');d.className='cortina-ecos';d.setAttribute('aria-hidden','true');
+var d=document.createElement('div');d.className='cortina-ecos';var h=document.documentElement;h.classList.add('con-cortina');var q=function(){d.remove();h.classList.remove('con-cortina')};setTimeout(q,2500);d.setAttribute('aria-hidden','true');
 d.innerHTML='<img src="/logo-ecos-solo.svg" alt="" width="260" height="78">';
 document.body.appendChild(d);
-d.addEventListener('animationend',function(e){if(e.target===d)d.remove()});
+d.addEventListener('animationend',function(e){if(e.target===d)q()});
 }catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

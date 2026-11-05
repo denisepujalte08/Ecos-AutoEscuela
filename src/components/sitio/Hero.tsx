@@ -70,18 +70,24 @@ function HeroB() {
     >
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 lg:grid-cols-2 lg:px-8">
         <div>
-          <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary-dark">
+          <p className="animate-fade-up mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary-dark">
             <span aria-hidden="true" className="h-4 w-0.5 bg-primary-dark" />
             Escuela de Conducción Segura
           </p>
-          <h1 className="mb-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
+          <h1
+            className="animate-fade-up mb-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl"
+            style={{ animationDelay: '0.1s' }}
+          >
             Aprendé a manejar con <span className="text-primary-dark">confianza</span>
           </h1>
-          <p className="mb-8 max-w-lg text-lg leading-relaxed text-muted-foreground">
+          <p
+            className="animate-fade-up mb-8 max-w-lg text-lg leading-relaxed text-muted-foreground"
+            style={{ animationDelay: '0.2s' }}
+          >
             Clases prácticas en auto, de a una por día, con instructores que te acompañan paso a paso. Elegí tu curso
             y coordinamos tus turnos por WhatsApp.
           </p>
-          <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="animate-fade-up flex flex-col gap-4 sm:flex-row" style={{ animationDelay: '0.3s' }}>
             <Boton href={whatsappUrl(MENSAJES.consulta)} externo>
               Reservar por WhatsApp
             </Boton>
@@ -98,7 +104,8 @@ function HeroB() {
           width={876}
           height={554}
           sizes="(min-width: 1024px) 560px, 100vw"
-          className="aspect-[4/3] max-h-[55svh] w-full rounded-2xl object-cover shadow-card-hover"
+          className="animate-fade-up aspect-[4/3] max-h-[55svh] w-full rounded-2xl object-cover shadow-card-hover"
+          style={{ animationDelay: '0.25s' }}
         />
       </div>
     </section>
