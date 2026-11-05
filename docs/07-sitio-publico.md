@@ -1,6 +1,6 @@
 # Sitio público
 
-La página de inicio es una sola página con cuatro secciones. **Provisorio:** la portada principal (`/`) es la versión B; la versión C (`/c`) se conserva como alternativa y se borra si no se elige. Ambas tienen cuatro secciones; el menú lleva a cada una con scroll suave y marca con un recuadro en cuál se está:
+La página de inicio es una sola página con cuatro secciones. **Provisorio:** la portada principal (`/`) es la versión B; las versiones C (`/c`) y D (`/d`, fondo liso con el emblema como marca de agua) se conservan como alternativas y se borran si no se eligen. Ambas tienen cuatro secciones; el menú lleva a cada una con scroll suave y marca con un recuadro en cuál se está:
 
 | Menú | Sección (id) | Contenido |
 |---|---|---|
@@ -35,6 +35,7 @@ Por pedido del cliente, **todos los botones de reserva llevan a WhatsApp** con u
 
 - El número y los mensajes están en `src/lib/site.ts` (con test en `site.test.ts`).
 - El mensaje de un curso incluye su nombre, para que quien atiende sepa qué eligió.
+- El pie de página (columna "Contacto") muestra el WhatsApp, el Instagram y la dirección de la escuela (Pueyrredón 186, Resistencia, Chaco), con un enlace "Cómo llegar" a Google Maps. Los datos están en `src/lib/site.ts`. **Decisión del cliente: no se incrusta un mapa**, solo la dirección con el enlace "Cómo llegar" (abre la app de mapas, carga menos y no usa cookies de terceros).
 
 ## Supuestos (a confirmar con el cliente)
 
@@ -42,4 +43,4 @@ Por pedido del cliente, **todos los botones de reserva llevan a WhatsApp** con u
 - **Descuentos:** el sitio no menciona descuentos ni formas de pago hasta que el cliente defina las reglas (ver `03-preguntas-pendientes.md`).
 - **Examen:** el sitio ya no aclara que el costo del examen no está incluido (respuesta 24 del cliente); el curso de 10 clases dice que se acompaña a rendir el examen práctico en la clase 10. Confirmar con el cliente si hace falta aclarar el costo.
 - **Textos:** los escribió el equipo de desarrollo con lo que se sabe de la escuela; el cliente debe revisarlos.
-- **Dirección, horarios y redes:** no se publican todavía; faltan datos del cliente.
+- **Horarios:** no se publican todavía; falta el dato del cliente.

@@ -99,7 +99,7 @@ h4 {
 }
 
 @utility bg-section-alt {
-  background: linear-gradient(180deg, #fffaf5 0%, #f6ede3 100%);
+  background: #fffaf5;
 }
 
 /* Quien prefiere menos movimiento no ve animaciones. */
@@ -158,7 +158,4 @@ h4 {
   }
 }
 
-/* Selector de la versión /b: con data-onda="sin" se oculta la onda al pie de la portada. */
-html[data-onda="sin"] .onda-hero {
-  display: none;
-}
+

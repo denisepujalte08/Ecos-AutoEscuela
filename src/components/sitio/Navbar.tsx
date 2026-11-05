@@ -20,10 +20,10 @@ export function Navbar() {
     () => true,
     () => false,
   );
-  const enPruebas = enNavegador && pathname === '/c';
+  const enPruebas = enNavegador && (pathname === '/c' || pathname === '/d');
   const enInicio = enNavegador && (pathname === '/' || enPruebas);
   const resaltado = enInicio ? activo : null;
-  // En la versión de prueba de la portada (/c) los enlaces se quedan en esa misma página.
+  // En las versiones de prueba de la portada (/c y /d) los enlaces se quedan en esa misma página.
   const destino = (id: string) => (enPruebas ? `${pathname}#${id}` : `/#${id}`);
   const progreso = useRef<HTMLDivElement>(null);
   const whatsapp = whatsappUrl(MENSAJES.consulta);

@@ -85,3 +85,18 @@ export const IconoTelefono = (p: Props) => (
     <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
   </Base>
 );
+
+export const IconoInstagram = (p: Props) => (
+  <Base {...p}>
+    <rect x="1" y="1" width="22" height="22" rx="6" />
+    <circle cx="12" cy="12" r="5" />
+    <circle cx="18" cy="6" r="1.1" fill="currentColor" stroke="none" />
+  </Base>
+);
+
+export const IconoUbicacion = (p: Props) => (
+  <Base {...p}>
+    <path d="M12 23s8-6.8 8-13a8 8 0 1 0-16 0c0 6.2 8 13 8 13z" />
+    <circle cx="12" cy="10" r="3" />
+  </Base>
+);

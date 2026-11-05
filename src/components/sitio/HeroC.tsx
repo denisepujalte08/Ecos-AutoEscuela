@@ -37,8 +37,8 @@ export function HeroC() {
         />
 
         <div className="relative mx-auto w-full max-w-6xl px-4 lg:px-8">
-          {/* Lema arriba, en una sola línea */}
-          <div className="mb-8 lg:-translate-y-8">
+          {/* Lema arriba, en una sola línea, y debajo los puntos en una fila */}
+          <div className="mb-8 lg:-translate-y-6">
             <p className="animate-fade-up mb-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary-dark">
               <span aria-hidden="true" className="h-4 w-0.5 bg-primary-dark" />
               Escuela de Conducción Segura
@@ -49,36 +49,35 @@ export function HeroC() {
             >
               Aprendé seguro, <em className="font-medium italic text-primary-dark">llegá más lejos.</em>
             </h1>
+            <ul
+              className="animate-fade-up mt-5 flex flex-wrap gap-x-7 gap-y-2 text-sm font-medium text-foreground"
+              style={{ animationDelay: '0.2s' }}
+            >
+              {CONFIANZA.map((c) => (
+                <li key={c} className="flex items-center gap-2">
+                  <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary-dark">
+                    <IconoCheck className="h-3 w-3" />
+                  </span>
+                  {c}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+          <div className="grid items-center gap-12 lg:grid-cols-[auto_auto] lg:items-end lg:justify-center lg:gap-14">
             <div className="lg:order-2">
-              <ul
-                className="animate-fade-up mb-7 space-y-2.5 text-base font-medium text-foreground"
-                style={{ animationDelay: '0.2s' }}
-              >
-                {CONFIANZA.map((c) => (
-                  <li key={c} className="flex items-center gap-3">
-                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary-dark">
-                      <IconoCheck className="h-3.5 w-3.5" />
-                    </span>
-                    {c}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="animate-fade-up flex flex-col gap-4 sm:flex-row" style={{ animationDelay: '0.3s' }}>
-                <Boton href={whatsappUrl(MENSAJES.consulta)} externo tamano="normal">
-                  Reservar por WhatsApp
-                </Boton>
+              <div className="animate-fade-up flex flex-col items-start gap-4" style={{ animationDelay: '0.3s' }}>
                 <Boton href="#cursos" variante="contorno" tamano="normal">
                   Ver cursos
                   <IconoFlecha className="h-5 w-5" />
                 </Boton>
+                <Boton href={whatsappUrl(MENSAJES.consulta)} externo tamano="normal">
+                  Reservar por WhatsApp
+                </Boton>
               </div>
             </div>
 
-            <div className="animate-fade-up relative lg:order-1 lg:-translate-y-6" style={{ animationDelay: '0.25s' }}>
+            <div className="animate-fade-up relative w-fit max-w-full lg:order-1" style={{ animationDelay: '0.25s' }}>
               {/* Marco de color desplazado: da profundidad a la foto */}
               <div
                 aria-hidden="true"
@@ -90,8 +89,8 @@ export function HeroC() {
                 width={876}
                 height={554}
                 priority
-                sizes="(min-width: 1024px) 520px, 100vw"
-                className="relative aspect-[4/3] max-h-[46svh] w-full rotate-1 rounded-3xl border-4 border-white object-cover shadow-card-hover"
+                sizes="(min-width: 1024px) 600px, 100vw"
+                className="relative aspect-[9/5] h-[44svh] w-auto max-w-full rotate-1 rounded-3xl border-4 border-white object-cover object-bottom shadow-card-hover"
               />
 
               {INSIGNIAS.map(({ icono: Icono, texto, posicion, retardo }) => (

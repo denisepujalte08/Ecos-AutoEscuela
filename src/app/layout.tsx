@@ -29,7 +29,7 @@ export const metadata: Metadata = {
  */
 const CORTINA_ENTRADA = `(function(){try{
 var w=window,c=navigator.connection||{},k='ecos-intro-visto';
-if(['/','/c'].indexOf(w.location.pathname)<0||w.location.hash||w.innerWidth<768||c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||'')||w.matchMedia('(prefers-reduced-motion: reduce)').matches||w.sessionStorage.getItem(k))return;
+if(['/','/c','/d'].indexOf(w.location.pathname)<0||w.location.hash||w.innerWidth<768||c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||'')||w.matchMedia('(prefers-reduced-motion: reduce)').matches||w.sessionStorage.getItem(k))return;
 w.sessionStorage.setItem(k,'1');
 var d=document.createElement('div');d.className='cortina-ecos';var h=document.documentElement;h.classList.add('con-cortina');var q=function(){d.remove();h.classList.remove('con-cortina')};setTimeout(q,2500);d.setAttribute('aria-hidden','true');
 d.innerHTML='<img src="/logo-ecos-solo.svg" alt="" width="260" height="78">';
