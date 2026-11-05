@@ -2,14 +2,29 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
-import { ENLACES, MENSAJES, SITE, whatsappUrl } from '@/lib/site';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { ENLACES, MENSAJES, whatsappUrl } from '@/lib/site';
 import { Boton } from './Boton';
-import { IconoCerrar, IconoMenu, IconoTelefono } from './iconos';
+import { IconoCerrar, IconoMenu } from './iconos';
 
 export function Navbar() {
   const [abierto, setAbierto] = useState(false);
   const [flotante, setFlotante] = useState(false);
+  const [activo, setActivo] = useState<string>(ENLACES[0].id);
+  const pathname = usePathname();
+  // `false` en el servidor y durante la hidratación, `true` ya en el navegador: así el HTML coincide y
+  // recién después se marca la sección activa y se ajustan los enlaces según la ruta.
+  const enNavegador = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+  const enPruebas = enNavegador && pathname === '/c';
+  const enInicio = enNavegador && (pathname === '/' || enPruebas);
+  const resaltado = enInicio ? activo : null;
+  // En la versión de prueba de la portada (/c) los enlaces se quedan en esa misma página.
+  const destino = (id: string) => (enPruebas ? `${pathname}#${id}` : `/#${id}`);
   const progreso = useRef<HTMLDivElement>(null);
   const whatsapp = whatsappUrl(MENSAJES.consulta);
 
@@ -23,6 +38,14 @@ export function Navbar() {
         const total = document.documentElement.scrollHeight - window.innerHeight;
         const avance = total > 0 ? Math.min(1, window.scrollY / total) : 0;
         if (progreso.current) progreso.current.style.transform = `scaleX(${avance})`;
+
+        // Sección en pantalla: la última cuyo borde superior ya pasó el 45% de la altura de la ventana.
+        let actual: string = ENLACES[0].id;
+        for (const e of ENLACES) {
+          const seccion = document.getElementById(e.id);
+          if (seccion && seccion.getBoundingClientRect().top <= window.innerHeight * 0.45) actual = e.id;
+        }
+        setActivo(actual);
       });
     };
     window.addEventListener('scroll', alMover, { passive: true });
@@ -48,8 +71,8 @@ export function Navbar() {
         <div
           className={`mx-auto transition-all duration-300 ${
             flotante
-              ? 'max-w-6xl rounded-2xl border border-border/60 bg-background/90 shadow-xl backdrop-blur-lg [[data-diseno=b]_&]:bg-background/95'
-              : 'max-w-full border-b border-border/50 bg-background/80 backdrop-blur-lg [[data-diseno=b]_&]:border-transparent [[data-diseno=b]_&]:bg-transparent [[data-diseno=b]_&]:backdrop-blur-none'
+              ? 'max-w-6xl rounded-2xl border border-border/60 bg-background/95 shadow-xl backdrop-blur-lg'
+              : 'max-w-full border-b border-transparent bg-transparent'
           }`}
         >
           <nav
@@ -62,12 +85,17 @@ export function Navbar() {
               <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} priority />
             </Link>
 
-            <ul className="hidden items-center gap-8 lg:flex">
+            <ul className="hidden items-center gap-1 lg:flex">
               {ENLACES.map((e) => (
                 <li key={e.href}>
                   <Link
-                    href={e.href}
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    href={destino(e.id)}
+                    aria-current={resaltado === e.id ? 'location' : undefined}
+                    className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                      resaltado === e.id
+                        ? 'bg-primary/15 text-foreground'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
                   >
                     {e.etiqueta}
                   </Link>
@@ -76,16 +104,8 @@ export function Navbar() {
             </ul>
 
             <div className="hidden items-center gap-4 lg:flex">
-              <a
-                href={`tel:+${SITE.whatsappNumero}`}
-                className="solo-a flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <IconoTelefono className="h-4 w-4" />
-                {SITE.whatsappVisible}
-              </a>
               <Boton href={whatsapp} externo tamano="normal">
-                <span className="solo-a">Reservar</span>
-                <span className="solo-b">Reservar por WhatsApp</span>
+                Reservar por WhatsApp
               </Boton>
             </div>
 
@@ -107,9 +127,14 @@ export function Navbar() {
                 {ENLACES.map((e) => (
                   <li key={e.href}>
                     <Link
-                      href={e.href}
+                      href={destino(e.id)}
                       onClick={() => setAbierto(false)}
-                      className="block py-2 text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+                      aria-current={resaltado === e.id ? 'location' : undefined}
+                      className={`block rounded-lg px-3 py-2 text-base font-medium transition-colors ${
+                        resaltado === e.id
+                          ? 'bg-primary/15 text-foreground'
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
                     >
                       {e.etiqueta}
                     </Link>

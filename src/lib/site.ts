@@ -3,6 +3,8 @@
 export const SITE = {
   nombre: 'ECOS',
   nombreCompleto: 'ECOS – Escuela de Conducción Segura',
+  /** Lema de la escuela, tal como lo usa el cliente. */
+  lema: 'Aprendé seguro, llegá más lejos',
   descripcion:
     'Clases prácticas de manejo en auto, en turnos de 40 minutos con instructores profesionales. Reservá tu curso por WhatsApp.',
   /** Solo dígitos, con código de país (+54 9 = celular de Argentina). */
@@ -20,9 +22,10 @@ export const MENSAJES = {
   curso: (nombre: string) => `Hola! Quiero reservar el ${nombre} en ECOS.`,
 } as const;
 
+/** Enlaces del menú: cada uno lleva a una sección de la página de inicio (`id` es el de la sección). */
 export const ENLACES = [
-  { etiqueta: 'Inicio', href: '/' },
-  { etiqueta: 'Cursos', href: '/cursos' },
-  { etiqueta: 'Nosotros', href: '/nosotros' },
-  { etiqueta: 'Contacto', href: '/contacto' },
+  { etiqueta: 'Inicio', href: '/#inicio', id: 'inicio' },
+  { etiqueta: 'Cursos', href: '/#cursos', id: 'cursos' },
+  { etiqueta: 'Nosotros', href: '/#nosotros', id: 'nosotros' },
+  { etiqueta: 'Contacto', href: '/#contacto', id: 'contacto' },
 ] as const;

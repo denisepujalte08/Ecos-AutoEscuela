@@ -1,7 +1,7 @@
 import { Aparecer } from './Aparecer';
 
 const PASOS = [
-  { titulo: 'Elegí tu curso', texto: 'De 5 o de 7 clases, según lo que necesites practicar.' },
+  { titulo: 'Elegí tu curso', texto: 'De 5 clases si ya tenés licencia, o de 7 o 10 si empezás de cero.' },
   { titulo: 'Escribinos por WhatsApp', texto: 'Te respondemos y coordinamos los horarios que mejor te queden.' },
   { titulo: 'Confirmamos tus turnos', texto: 'Reservamos tus clases y te avisamos. Solo queda venir a manejar.' },
 ];

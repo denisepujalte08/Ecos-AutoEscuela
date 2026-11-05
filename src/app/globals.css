@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
-/* Paleta de la plantilla: dorado sobre crema, con negro para contraste. */
+/* Paleta de ECOS: naranja suave del logo sobre crema, con texto oscuro. */
 @theme {
-  --color-background: hsl(30 100% 99%);
-  --color-foreground: hsl(0 0% 18%);
-  --color-card: hsl(30 100% 99%);
-  --color-card-foreground: hsl(0 0% 18%);
-  --color-primary: hsl(36 58% 58%);
-  --color-primary-foreground: hsl(0 0% 100%);
-  /* Color del texto sobre botones y círculos de color primario. */
-  --color-on-primary: hsl(0 0% 100%);
-  --color-primary-dark: hsl(36 52% 48%);
-  --color-secondary: hsl(0 0% 10%);
-  --color-muted-foreground: hsl(0 0% 42%);
-  --color-border: hsl(30 20% 90%);
+  --color-background: #fffaf5;
+  --color-foreground: #1a1a1a;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-primary: #f08a3e;
+  --color-primary-foreground: #ffffff;
+  /* Color del texto sobre botones y círculos de color primario (oscuro: mejor contraste que el blanco). */
+  --color-on-primary: #141414;
+  --color-primary-dark: #d96f26;
+  --color-secondary: #141414;
+  --color-muted-foreground: #6b6560;
+  --color-border: #eadfd2;
   --color-success: hsl(122 39% 49%);
 
   --font-sans: var(--font-inter), system-ui, sans-serif;
@@ -23,6 +23,16 @@
   --shadow-card-hover: 0 12px 40px -8px hsl(0 0% 18% / 0.15);
 
   --animate-fade-up: fade-up 0.7s ease-out both;
+  --animate-flotar: flotar 5s ease-in-out infinite alternate;
+
+  @keyframes flotar {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-8px);
+    }
+  }
 
   @keyframes fade-up {
     from {
@@ -36,33 +46,18 @@
   }
 }
 
-/* Diseño B: el primero que armamos (naranja y negro del logo, portada oscura). */
-:root[data-diseno="b"] {
-  --color-background: #fffaf5;
-  --color-foreground: #1a1a1a;
-  --color-card: #ffffff;
-  --color-card-foreground: #1a1a1a;
-  --color-primary: #f08a3e;
-  --color-primary-dark: #d96f26;
-  --color-on-primary: #141414;
-  --color-secondary: #141414;
-  --color-muted-foreground: #6b6560;
-  --color-border: #eadfd2;
+/* Fondos de bloques sueltos. */
+:root {
   --cta-fondo: linear-gradient(135deg, #f6a45e, #f08a3e);
   --cta-texto: #141414;
   --fondo-cursos: #f6ede3;
 }
 
-:root {
-  --cta-fondo: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  --cta-texto: #ffffff;
-  --fondo-cursos: var(--color-background);
-}
-
-/* Elementos que existen solo en uno de los dos diseños. */
-:root[data-diseno="a"] .solo-b,
-:root[data-diseno="b"] .solo-a {
-  display: none !important;
+/* Al tocar un enlace del menú, la página se desliza hasta la sección. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Desde tablet: cada sección ocupa una pantalla y el scroll se acomoda al llegar a ella. */
@@ -103,12 +98,8 @@ h4 {
   color: transparent;
 }
 
-@utility bg-hero-overlay {
-  background: linear-gradient(135deg, hsl(0 0% 10% / 0.55), hsl(30 20% 15% / 0.6));
-}
-
 @utility bg-section-alt {
-  background: linear-gradient(180deg, hsl(30 100% 99%) 0%, hsl(30 33% 93%) 100%);
+  background: linear-gradient(180deg, #fffaf5 0%, #f6ede3 100%);
 }
 
 /* Quien prefiere menos movimiento no ve animaciones. */
@@ -119,7 +110,7 @@ h4 {
   }
 }
 
-/* Cortina de bienvenida del diseño B: el logo se revela y la pantalla sube (ver layout.tsx). */
+/* Cortina de bienvenida: el logo se revela y la pantalla sube (ver layout.tsx). */
 .cortina-ecos {
   position: fixed;
   inset: 0;
@@ -165,4 +156,9 @@ h4 {
   .cortina-ecos {
     display: none;
   }
+}
+
+/* Selector de la versión /b: con data-onda="sin" se oculta la onda al pie de la portada. */
+html[data-onda="sin"] .onda-hero {
+  display: none;
 }

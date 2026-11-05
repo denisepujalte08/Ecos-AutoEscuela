@@ -27,10 +27,22 @@ const VENTAJAS: Ventaja[] = [
   },
 ];
 
-export function Ventajas() {
+/** Con `conTitulo` es la sección "Nosotros" de la página de inicio. */
+export function Ventajas({ conTitulo = false }: { conTitulo?: boolean }) {
   return (
     <section className="pantalla bg-background py-10">
       <div className="mx-auto w-full max-w-7xl px-4 lg:px-8">
+        {conTitulo && (
+          <Aparecer className="mb-8 text-center">
+            <h2 className="mb-3 text-3xl font-bold text-foreground md:text-4xl">
+              Sobre <span className="text-gradient-primary">ECOS</span>
+            </h2>
+            <p className="mx-auto max-w-2xl text-base text-muted-foreground">
+              Somos una escuela de conducción: acá aprendés a manejar practicando de verdad, con clases cortas y
+              frecuentes.
+            </p>
+          </Aparecer>
+        )}
         <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {VENTAJAS.map(({ icono: Icono, titulo, texto }, i) => (
             <li key={titulo}>

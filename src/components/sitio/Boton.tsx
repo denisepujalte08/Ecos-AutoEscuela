@@ -36,7 +36,7 @@ export function Boton({ href, children, variante = 'primario', tamano = 'grande'
   if (externo) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={clases}>
-        {variante === 'primario' && <IconoWhatsApp className="solo-b h-5 w-5" />}
+        {variante === 'primario' && <IconoWhatsApp className="h-5 w-5" />}
         {children}
       </a>
     );

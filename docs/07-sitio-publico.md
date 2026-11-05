@@ -1,25 +1,33 @@
 # Sitio público
 
-Páginas: Inicio (`/`), Cursos, Nosotros, Contacto. Viven en `src/app/(sitio)/` con un layout común (barra de navegación + pie). El panel interno tendrá su propio layout.
+La página de inicio es una sola página con cuatro secciones. **Provisorio:** la portada principal (`/`) es la versión B; la versión C (`/c`) se conserva como alternativa y se borra si no se elige. Ambas tienen cuatro secciones; el menú lleva a cada una con scroll suave y marca con un recuadro en cuál se está:
 
-## Dos diseños para elegir (provisorio)
+| Menú | Sección (id) | Contenido |
+|---|---|---|
+| Inicio | `#inicio` | Portada con la foto del auto de ECOS |
+| Cursos | `#cursos` | Tarjetas de precios y "Cómo reservar" |
+| Nosotros | `#nosotros` | "Sobre ECOS" y las cuatro ventajas |
+| Contacto | `#contacto` | Llamado final con el WhatsApp |
 
-Para que el cliente elija, el sitio trae **dos diseños** con un deslizador flotante "Diseño A / Diseño B" (abajo al centro; recuerda la elección en el navegador):
+Los enlaces del menú están en `src/lib/site.ts` (`ENLACES`) y los `id` en `src/app/(sitio)/page.tsx`. Existen además las páginas `/cursos`, `/nosotros` y `/contacto`, que hoy no están enlazadas desde el menú.
 
-- **A (por defecto):** fiel a la plantilla. Foto a pantalla completa con degradé y onda blanca, barra translúcida, dorado sobre crema, pie oscuro.
-- **B:** el primero que armamos. Portada oscura dividida con marco de foto, naranja y negro del logo, pie claro con el logo.
+Viven en `src/app/(sitio)/` con un layout común (barra + pie). El panel interno tendrá su propio layout.
 
-Cómo está hecho: los colores cambian con el atributo `data-diseno` de `<html>` (tokens en `src/app/globals.css`) y los pocos elementos distintos (portada, pie, botón de la barra) llevan la clase `solo-a` o `solo-b`. Las páginas interiores (Cursos, Nosotros, Contacto) comparten estructura y solo cambian de colores.
+## Diseño
 
-**Al elegir uno:** borrar `SelectorDiseno.tsx` (y su uso en `(sitio)/layout.tsx`), el script y `data-diseno` de `src/app/layout.tsx`, el diseño que no gane (sus tokens, las clases `solo-*` y su versión de `Hero` y `Footer`) y `MarcoImagen` si ya no se usa.
+Se tomó la estructura de la plantilla de Lovable "Pet Resort Page" (secciones, tarjetas, aparición animada), **reescrita para Next.js 16 y Tailwind 4** y sin sus dependencias (shadcn/ui, framer-motion, react-router, lucide). Los íconos son SVG propios en `src/components/sitio/iconos.tsx`. El cliente vio dos variantes (una fiel a la plantilla, dorada, y otra naranja y crema) y **se eligió la naranja**; la otra se eliminó.
 
-## Origen del diseño
+- **Paleta:** naranja suave `#F08A3E` del logo sobre crema, con texto oscuro sobre los botones naranjas (mejor contraste que el blanco). Los colores están en `src/app/globals.css`.
+- **Fuentes:** Poppins (títulos) e Inter (texto), con `next/font`. La plantilla traía Fredoka; se cambió por pedido. Para probar otra, se cambia en `src/app/layout.tsx`.
+- **Foto:** la portada usa la foto del auto de ECOS (`public/auto-ecos.jpg`, recortada de una captura; mide 888 px de ancho, conviene reemplazarla por el original en mayor resolución).
+- **Logo:** `public/logo-ecos-solo.svg` (vectorial, 2,6 KB).
 
-Se tomó la estructura y el estilo de la plantilla de Lovable "Pet Resort Page" (secciones, tarjetas, estilo cálido), pero **reescrita para Next.js 16 y Tailwind 4** y sin las dependencias de la plantilla (shadcn/ui, framer-motion, react-router, lucide). Los íconos son SVG propios en `src/components/sitio/iconos.tsx`.
+## Comportamientos
 
-- **Paleta A:** dorado y crema de la plantilla. **Paleta B:** el naranja `#FB6D00` y el negro del logo de ECOS, con texto oscuro sobre los botones naranjas (mejor contraste que el blanco).
-- **Fuentes:** Poppins (títulos) e Inter (texto), con `next/font`. La plantilla traía Fredoka (redondeada); se cambió por pedido. Para probar otra, se cambia en `src/app/layout.tsx`.
-- **Fotos:** todavía no hay fotos de ECOS. El diseño A usa **provisoriamente la foto de portada de la plantilla** (`public/plantilla/hero.jpg`, un perro): hay que reemplazarla. En el diseño B, el lugar de la foto es un `MarcoImagen` (marco vacío).
+- **Barra de navegación:** transparente arriba; al bajar pasa a ser una píldora flotante con sombra, y una línea de color arriba de todo muestra el avance de lectura. Idea tomada del sitio de Comdetur.
+- **Cortina de bienvenida:** el logo se revela y la pantalla sube (≈1 s). Solo en escritorio, una vez por sesión, en la portada, y nunca con movimiento reducido, conexión lenta o ahorro de datos. Es un script en `src/app/layout.tsx` (corre antes de React para no parpadear); estilos `.cortina-ecos` en `globals.css`.
+- **Una pantalla por sección:** desde tablet, cada sección ocupa una pantalla y el scroll se acomoda al llegar (clase `pantalla` y `scroll-snap` en `globals.css`). En celular el contenido se apila normalmente.
+- **Aparición animada:** `Aparecer.tsx` hace que las tarjetas suban al entrar en pantalla. El contenido nace visible; solo se anima lo que está más abajo.
 
 ## Reservas por WhatsApp (etapa actual)
 
@@ -28,9 +36,10 @@ Por pedido del cliente, **todos los botones de reserva llevan a WhatsApp** con u
 - El número y los mensajes están en `src/lib/site.ts` (con test en `site.test.ts`).
 - El mensaje de un curso incluye su nombre, para que quien atiende sepa qué eligió.
 
-## Supuestos (marcados, a confirmar con el cliente)
+## Supuestos (a confirmar con el cliente)
 
 - **Precios en pantalla:** hoy están escritos a mano en `src/lib/cursos.ts` (los del cartel: 5 clases $165.000, 7 clases $230.000). Es una duplicación temporal: el PR de reservas los va a leer de la tabla `courses` (`precio_lista`). El curso de 10 clases no se muestra hasta conocer su precio.
-- **Descuentos:** el sitio solo dice "consultá por descuentos pagando en efectivo o transferencia", sin porcentajes, hasta que el cliente defina las reglas (ver `03-preguntas-pendientes.md`).
-- **Examen:** el texto aclara que no está incluido (respuesta 24 del cliente).
+- **Descuentos:** el sitio no menciona descuentos ni formas de pago hasta que el cliente defina las reglas (ver `03-preguntas-pendientes.md`).
+- **Examen:** el sitio ya no aclara que el costo del examen no está incluido (respuesta 24 del cliente); el curso de 10 clases dice que se acompaña a rendir el examen práctico en la clase 10. Confirmar con el cliente si hace falta aclarar el costo.
+- **Textos:** los escribió el equipo de desarrollo con lo que se sabe de la escuela; el cliente debe revisarlos.
 - **Dirección, horarios y redes:** no se publican todavía; faltan datos del cliente.
