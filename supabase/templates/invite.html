@@ -7,7 +7,7 @@
         Confirmamos tu pago. Ya podés entrar a tu cuenta para elegir tus turnos.
       </p>
       <p style="margin:24px 0;">
-        <a href="{{ .ConfirmationURL }}"
+        <a href="{{ .SiteURL }}/auth/confirmar?token_hash={{ .TokenHash }}&type=invite"
            style="background:#f08a3e;color:#141414;text-decoration:none;font-weight:bold;padding:12px 24px;border-radius:999px;display:inline-block;">
           Entrar a mi cuenta
         </a>

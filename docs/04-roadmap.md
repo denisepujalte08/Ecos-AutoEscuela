@@ -25,7 +25,7 @@
 3. **Compra desde la web** (pagar primero, elegir turnos después; ver `docs/08-compra-web.md`), en PRs chicos:
    1. ~~Pantalla "Comprar curso" → WhatsApp~~ (hecho).
    2. Panel del personal. a) ~~Login y permisos~~ (hecho, ver `docs/09-panel-personal.md`). b) ~~Pedidos pendientes, confirmar pago, dar de alta al alumno con aviso por mail~~ (hecho, ver `docs/10-pedidos-y-alta.md`).
-   3. Panel del alumno: login, completar ficha, elegir turnos y reprogramarlos.
+   3. Panel del alumno: a) ~~entrar con link por mail, completar ficha y elegir turnos~~ (hecho, ver `docs/12-panel-alumno.md`). b) Ver y reprogramar turnos.
 4. **Mercado Pago:** ~~orden y webhook~~ (hecho con la API de Orders); falta probarlo con credenciales de prueba y armar la página de retorno `/reserva/resultado`.
 5. **Panel admin:** ~~calendario semanal de solo lectura~~ (hecho, ver `docs/11-calendario.md`); falta marcar clase dictada, pagos pendientes con comprobante, bloqueos, reservas manuales.
 6. **Mi cuenta** del alumno y reprogramación (reglas según respuestas del cliente).

@@ -126,3 +126,35 @@ export function rotuloDia(fecha: string): string {
   const nombre = DIAS[diaIso(fecha) - 1] ?? '';
   return `${nombre.charAt(0).toUpperCase()}${nombre.slice(1)} ${Number(fecha.slice(8, 10))}`;
 }
+
+/** Día (Argentina) de un instante, como `AAAA-MM-DD`. */
+export function fechaLocal(instante: string | Date): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: ZONA, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(instante));
+}
+
+/** Edad cumplida en `hoy`, para una fecha de nacimiento `AAAA-MM-DD`. */
+export function edadEn(nacimiento: string, hoy: string): number {
+  const [ny, nm, nd] = nacimiento.split('-').map(Number);
+  const [hy, hm, hd] = hoy.split('-').map(Number);
+  return hy - ny - (hm < nm || (hm === nm && hd < nd) ? 1 : 0);
+}
+
+/** Mayoría de edad en Argentina. */
+export const MAYORIA_DE_EDAD = 18;
+
+export function esMenorDeEdad(nacimiento: string, hoy: string): boolean {
+  return edadEn(nacimiento, hoy) < MAYORIA_DE_EDAD;
+}
+
+const DIAS_LARGOS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+
+/** "jueves 5 de noviembre" */
+export function rotuloFecha(fecha: string): string {
+  const [, m, d] = fecha.split('-').map(Number);
+  return `${DIAS_LARGOS[diaIso(fecha) - 1]} ${d} de ${MESES[m - 1]}`;
+}
+
+/** Primera letra en mayúscula, sin tocar el resto ("jueves 5 de noviembre" -> "Jueves 5 de noviembre"). */
+export function conMayuscula(texto: string): string {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
