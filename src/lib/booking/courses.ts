@@ -30,3 +30,20 @@ export async function getActiveCourses(client: PublicClient = createPublicClient
     incluyeExamen: c.incluye_examen,
   }));
 }
+
+export type Descuentos = { transferencia: number; efectivo: number };
+
+/**
+ * Descuento (en %) de cada medio de pago que se puede elegir en la web, leído de la base. Es solo para
+ * mostrar los montos: el monto real lo calcula la base al crear el pedido.
+ */
+export async function getDescuentos(client: PublicClient = createPublicClient()): Promise<Descuentos> {
+  const { data, error } = await client
+    .from('payment_method_rules')
+    .select('metodo, descuento_pct')
+    .in('metodo', ['transferencia', 'efectivo']);
+  if (error) throw new Error(`No se pudieron leer los descuentos: ${error.message}`);
+
+  const pct = (metodo: string) => Number(data?.find((r) => r.metodo === metodo)?.descuento_pct ?? 0);
+  return { transferencia: pct('transferencia'), efectivo: pct('efectivo') };
+}

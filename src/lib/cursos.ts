@@ -6,8 +6,8 @@
  * (`precio_lista`), que es la fuente de verdad. Hasta entonces, si cambian, actualizar
  * `supabase/seed.sql` y este archivo.
  *
- * El curso de 10 clases se muestra SIN precio ("consultá el precio") porque el cliente todavía no lo
- * pasó (pregunta 1 de `docs/03-preguntas-pendientes.md`).
+ * El precio del curso de 10 clases ($350.000) es un SUPUESTO provisorio: el cliente todavía no lo pasó
+ * (pregunta 1 de `docs/03-preguntas-pendientes.md`).
  *
  * Los textos de cada curso (para quién es y qué incluye) son del cliente: salen de su descripción de los
  * cursos y de su cartel de 7 clases.
@@ -54,7 +54,8 @@ export const CURSOS: CursoPublico[] = [
   {
     nombre: 'Curso completo de 10 clases',
     clases: 10,
-    precio: null,
+    // SUPUESTO: $350.000 es un valor provisorio hasta que el cliente pase el precio real (pregunta 1).
+    precio: 350000,
     etiqueta: 'Curso completo',
     paraQuien: 'Si recién empezás: comenzás sin experiencia y finalizás con licencia.',
     incluye: [

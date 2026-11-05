@@ -24,6 +24,9 @@ export function whatsappUrl(mensaje: string, numero: string = SITE.whatsappNumer
 }
 
 export const MENSAJES = {
+  /** Mensaje con el resumen de un pedido de compra, para coordinar el pago por WhatsApp. */
+  pedido: (p: { codigo: string; curso: string; metodo: string; monto: string; nombre: string; dni: string }) =>
+    `Hola! Hice el pedido ${p.codigo} del ${p.curso} (${p.metodo}, ${p.monto}) a nombre de ${p.nombre}, DNI ${p.dni}. Quiero coordinar el pago.`,
   consulta: 'Hola! Quiero consultar por los cursos de manejo de ECOS.',
   curso: (nombre: string) => `Hola! Quiero reservar el ${nombre} en ECOS.`,
 } as const;

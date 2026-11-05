@@ -58,13 +58,19 @@ export function TarjetasCursos({ conTitulo = false, comoPagina = false }: { conT
                     ))}
                   </ul>
 
-                  <Boton
-                    href={whatsappUrl(MENSAJES.curso(curso.nombre))}
-                    externo
-                    className="mt-auto w-full !rounded-lg !py-3 !text-base"
-                  >
-                    {curso.precio === null ? 'Consultar este curso' : 'Reservar este curso'}
-                  </Boton>
+                  {curso.precio === null ? (
+                    <Boton
+                      href={whatsappUrl(MENSAJES.curso(curso.nombre))}
+                      externo
+                      className="mt-auto w-full !rounded-lg !py-3 !text-base"
+                    >
+                      Consultar este curso
+                    </Boton>
+                  ) : (
+                    <Boton href={`/comprar?clases=${curso.clases}`} className="mt-auto w-full !rounded-lg !py-3 !text-base">
+                      Comprar este curso
+                    </Boton>
+                  )}
                 </div>
               </Aparecer>
             </li>
