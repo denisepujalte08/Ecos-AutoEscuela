@@ -16,22 +16,11 @@ const INSIGNIAS: Insignia[] = [
   { icono: IconoAuto, texto: 'Autos doble comando', posicion: '-bottom-4 left-10', retardo: '2.4s' },
 ];
 
-/** Portada (versión B): más movimiento y más información visual que la portada simple. */
+/** Portada principal: fondo liso crema, lema, foto del auto con tarjetas flotantes y onda al pie. */
 export function HeroB() {
   return (
     <div id="inicio">
-      <section
-        className="relative flex snap-start min-h-[min(100svh,52rem)] items-center overflow-hidden pb-12 pt-28"
-        style={{
-          background:
-            'radial-gradient(circle at 85% 15%, #ffe0c2 0%, transparent 45%), linear-gradient(180deg, #fff1e3 0%, #fffaf5 100%)',
-        }}
-      >
-        {/* Mancha de color detrás de la foto */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-16 h-[26rem] w-[26rem] rounded-full bg-primary/20 blur-3xl"
-        />
+      <section className="relative flex snap-start min-h-[min(100svh,52rem)] items-center overflow-hidden bg-background pb-12 pt-28">
 
         {/* Onda al pie de la portada: el color de la sección de cursos sube siguiendo la curva */}
         <svg
@@ -39,14 +28,13 @@ export function HeroB() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          className="onda-hero pointer-events-none absolute inset-x-0 bottom-0 w-full"
+          className="pointer-events-none absolute inset-x-0 bottom-0 w-full"
         >
           <path
             d="M0 120L60 105C120 90 240 60 360 52.5C480 45 600 60 720 67.5C840 75 960 75 1080 67.5C1200 60 1320 45 1380 37.5L1440 30V120H0Z"
             fill="var(--fondo-cursos)"
           />
         </svg>
-      
 
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:px-8">
           <div>

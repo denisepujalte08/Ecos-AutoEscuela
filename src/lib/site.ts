@@ -10,7 +10,13 @@ export const SITE = {
   /** Solo dígitos, con código de país (+54 9 = celular de Argentina). */
   whatsappNumero: '5493624855645',
   whatsappVisible: '+54 9 362 485-5645',
+  instagramUrl: 'https://www.instagram.com/ecosautoescuela/',
+  instagramUsuario: '@ecosautoescuela',
+  direccion: 'Pueyrredón 186, Resistencia, Chaco',
 } as const;
+
+/** Enlace que abre Google Maps con la dirección de la escuela. */
+export const MAPA_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.direccion)}`;
 
 /** Arma el enlace de WhatsApp con un mensaje ya escrito. */
 export function whatsappUrl(mensaje: string, numero: string = SITE.whatsappNumero): string {

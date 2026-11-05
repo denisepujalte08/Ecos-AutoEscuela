@@ -1,7 +1,6 @@
 import { ComoFunciona } from '@/components/sitio/ComoFunciona';
 import { HeroB } from '@/components/sitio/HeroB';
 import { LlamadoFinal } from '@/components/sitio/LlamadoFinal';
-import { SelectorOnda } from '@/components/sitio/SelectorOnda';
 import { TarjetasCursos } from '@/components/sitio/TarjetasCursos';
 import { Ventajas } from '@/components/sitio/Ventajas';
 
@@ -10,7 +9,6 @@ export default function Inicio() {
   return (
     <>
       <HeroB />
-      <SelectorOnda />
       <div id="cursos">
         <TarjetasCursos conTitulo />
         <ComoFunciona />
