@@ -70,7 +70,8 @@ function HeroB() {
     >
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 lg:grid-cols-2 lg:px-8">
         <div>
-          <p className="mb-5 inline-block rounded-full bg-primary/15 px-4 py-1.5 text-sm font-semibold text-primary-dark">
+          <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary-dark">
+            <span aria-hidden="true" className="h-4 w-0.5 bg-primary-dark" />
             Escuela de Conducción Segura
           </p>
           <h1 className="mb-5 text-4xl font-bold leading-tight text-foreground sm:text-5xl">
