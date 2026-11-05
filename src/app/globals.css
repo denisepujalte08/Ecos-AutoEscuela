@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
+/* Paleta de ECOS: naranja suave del logo sobre crema, con texto oscuro. */
+@theme {
+  --color-background: #fffaf5;
+  --color-foreground: #1a1a1a;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-primary: #f08a3e;
+  --color-primary-foreground: #ffffff;
+  /* Color del texto sobre botones y círculos de color primario (oscuro: mejor contraste que el blanco). */
+  --color-on-primary: #141414;
+  --color-primary-dark: #d96f26;
+  --color-secondary: #141414;
+  --color-muted-foreground: #6b6560;
+  --color-border: #eadfd2;
+  --color-success: hsl(122 39% 49%);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-heading: var(--font-titulos), system-ui, sans-serif;
+
+  --shadow-card: 0 4px 24px -4px hsl(0 0% 18% / 0.08);
+  --shadow-card-hover: 0 12px 40px -8px hsl(0 0% 18% / 0.15);
+
+  --animate-fade-up: fade-up 0.7s ease-out both;
+  --animate-flotar: flotar 5s ease-in-out infinite alternate;
+
+  @keyframes flotar {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Fondos de bloques sueltos. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cta-fondo: linear-gradient(135deg, #f6a45e, #f08a3e);
+  --cta-texto: #141414;
+  --fondo-cursos: #f6ede3;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Al tocar un enlace del menú, la página se desliza hasta la sección. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Desde tablet: cada sección ocupa una pantalla y el scroll se acomoda al llegar a ella. */
+@media (min-width: 768px) {
+  html {
+    scroll-snap-type: y proximity;
+    scroll-padding-top: 5rem;
+  }
+}
+
+@utility pantalla {
+  scroll-snap-align: start;
+  @media (min-width: 768px) {
+    min-height: calc(100svh - 5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+}
+
+@utility text-gradient-primary {
+  background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility bg-section-alt {
+  background: linear-gradient(180deg, #fffaf5 0%, #f6ede3 100%);
+}
+
+/* Quien prefiere menos movimiento no ve animaciones. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Cortina de bienvenida: el logo se revela y la pantalla sube (ver layout.tsx). */
+.cortina-ecos {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff1e3;
+  pointer-events: none;
+  will-change: transform;
+  animation: cortina-subir 0.55s cubic-bezier(0.76, 0, 0.24, 1) 0.5s forwards;
+}
+
+.cortina-ecos img {
+  width: min(260px, 60vw);
+  height: auto;
+  animation: cortina-logo 0.45s cubic-bezier(0.21, 0.47, 0.32, 0.98) both;
+}
+
+@keyframes cortina-subir {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes cortina-logo {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(8px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+
+/* Mientras la cortina cubre la página, la animación de entrada espera para que se vea. */
+.con-cortina .animate-fade-up {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cortina-ecos {
+    display: none;
+  }
+}
+
+/* Selector de la versión /b: con data-onda="sin" se oculta la onda al pie de la portada. */
+html[data-onda="sin"] .onda-hero {
+  display: none;
 }
