@@ -20,6 +20,22 @@ export const metadata: Metadata = {
   description: SITE.descripcion,
 };
 
+/**
+ * Cortina de bienvenida: una pantalla crema con el logo que se revela y sube (estilos: .cortina-ecos en globals.css).
+ * Solo en el diseño B, en escritorio, una vez por sesión, en la portada, y nunca con movimiento reducido,
+ * conexión lenta o ahorro de datos. Se pone encima de la página ya pintada, antes de que cargue React,
+ * para no demorarla ni hacerla parpadear. Si se elige el diseño A, se borra junto con el selector.
+ */
+const CORTINA_ENTRADA = `(function(){try{
+var w=window,c=navigator.connection||{},k='ecos-intro-visto';
+if(document.documentElement.getAttribute('data-diseno')!=='b'||w.location.pathname!=='/'||w.location.hash||w.innerWidth<768||c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||'')||w.matchMedia('(prefers-reduced-motion: reduce)').matches||w.sessionStorage.getItem(k))return;
+w.sessionStorage.setItem(k,'1');
+var d=document.createElement('div');d.className='cortina-ecos';d.setAttribute('aria-hidden','true');
+d.innerHTML='<img src="/logo-ecos-solo.svg" alt="" width="260" height="78">';
+document.body.appendChild(d);
+d.addEventListener('animationend',function(e){if(e.target===d)d.remove()});
+}catch(e){}})();`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -37,7 +53,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {/* Cortina de bienvenida (ver CORTINA_ENTRADA). */}
+        <script dangerouslySetInnerHTML={{ __html: CORTINA_ENTRADA }} />
+        {children}
+      </body>
     </html>
   );
 }

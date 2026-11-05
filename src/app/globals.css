@@ -118,3 +118,46 @@ h4 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Cortina de bienvenida del diseño B: el logo se revela y la pantalla sube (ver layout.tsx). */
+.cortina-ecos {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff1e3;
+  pointer-events: none;
+  will-change: transform;
+  animation: cortina-subir 0.55s cubic-bezier(0.76, 0, 0.24, 1) 0.5s forwards;
+}
+
+.cortina-ecos img {
+  width: min(260px, 60vw);
+  height: auto;
+  animation: cortina-logo 0.45s cubic-bezier(0.21, 0.47, 0.32, 0.98) both;
+}
+
+@keyframes cortina-subir {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes cortina-logo {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(8px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cortina-ecos {
+    display: none;
+  }
+}
