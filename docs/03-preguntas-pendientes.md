@@ -107,6 +107,11 @@ La numeración se mantiene. **Bloqueantes:** 2, 9, 10, 15, 23, 25, 26 y 60.
 51. ¿Hay fecha deseada de lanzamiento?
 52. ¿Quién va a administrar los usuarios y el mantenimiento después de la entrega? ¿Querés un acuerdo de soporte?
 53. ¿Pueden pasar el Excel actual (o una muestra sin datos reales) para diseñar la importación?
+64. Además de los cursos, venden productos. ¿Cuáles son y cuántos tipos hay (por ejemplo, ropa, accesorios, materiales)?
+65. ¿Tienen stock que controlar, o venden por pedido?
+66. ¿Los productos se retiran en la oficina o se envían? Si se envían, ¿cómo se cobra el envío?
+67. ¿Los productos aceptan los mismos medios de pago y descuentos que los cursos?
+68. ¿Se podría comprar un producto junto con un curso, en un mismo pedido?
 
 ## Tareas del cliente (no son preguntas)
 

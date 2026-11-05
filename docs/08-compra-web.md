@@ -49,6 +49,18 @@ pending_review ──confirm_payment──▶ active ──schedule_enrollment�
 | Cómo entra el alumno (usuario y contraseña o enlace por email) | A decidir con el cliente | 31 |
 | Aviso automático por mail al confirmar el pago | Sí (lo pidió Denise) | 42, 43 |
 
+## Más adelante: venta de productos
+
+El cliente también vende **productos** y le gustaría venderlos por la web. **No está en esta etapa**; se agrega después (preguntas 64 a 68).
+
+Hoy no hay carrito: cada compra es **un solo curso** y una persona no puede tener dos cursos a la vez (ver arriba). Para vender productos habrá que sumar, sin tocar lo de los cursos:
+
+- Un catálogo de productos (nombre, precio, foto y, si corresponde, stock).
+- Pedidos con varios ítems (ahí sí un carrito) y su propio estado: pendiente, pagado, entregado o enviado.
+- Retiro en la oficina o envío, según lo que responda el cliente (pregunta 66).
+
+Se puede reutilizar el mismo mecanismo de pago de esta etapa (efectivo o transferencia, que el personal confirma desde el panel) y, más adelante, Mercado Pago. Las inscripciones a cursos siguen en `enrollments`; los productos irían en tablas aparte.
+
 ## Protección contra abuso
 
 - **Nunca se retienen turnos sin pago**, así que nadie puede bloquear la agenda con datos falsos.
