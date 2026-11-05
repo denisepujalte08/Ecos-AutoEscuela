@@ -34,5 +34,8 @@
 9. **Sitio público:** inicio, cursos, contacto, logos.
 10. **Producción:** cuentas a nombre del cliente, dominio, planes Pro, `pg_cron` para `release_expired_holds`.
 
+## Más adelante
+- **Venta de productos por la web** (catálogo, carrito, stock, retiro o envío). Lo pidió el cliente; no está en esta etapa. Ver `docs/08-compra-web.md` y las preguntas 64 a 68.
+
 ## Depende de respuestas del cliente
 Ver `docs/03-preguntas-pendientes.md`. Las más bloqueantes: 2, 9, 10, 15, 23, 25, 26 y 60.
