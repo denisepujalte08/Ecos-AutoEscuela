@@ -7,7 +7,7 @@ import { iniciarSesion } from './actions';
 const INICIAL: EstadoLogin = { estado: 'inicial' };
 
 const CAMPO =
-  'w-full rounded-lg border border-border bg-white px-4 py-3 text-base focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary';
+  'w-full rounded-lg border border-border bg-white px-4 py-2.5 text-base focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary';
 
 export function FormularioLogin() {
   const [estado, accion, enviando] = useActionState(iniciarSesion, INICIAL);
@@ -39,7 +39,7 @@ export function FormularioLogin() {
       <button
         type="submit"
         disabled={enviando}
-        className="inline-flex w-full items-center justify-center rounded-full bg-primary px-8 py-3 text-base font-semibold text-on-primary shadow-lg transition-colors hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60"
+        className="inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-2.5 text-base font-semibold text-on-primary shadow-lg transition-colors hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60"
       >
         {enviando ? 'Ingresando…' : 'Ingresar'}
       </button>
