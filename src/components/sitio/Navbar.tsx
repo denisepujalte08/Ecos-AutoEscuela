@@ -55,7 +55,7 @@ export function Navbar() {
           <nav
             aria-label="Principal"
             className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-[height] duration-300 lg:px-8 ${
-              flotante ? 'h-16' : 'h-20'
+              flotante ? 'h-14' : 'h-16'
             }`}
           >
             <Link href="/" aria-label="ECOS, ir al inicio" onClick={() => setAbierto(false)}>
