@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ENLACES, MAPA_URL, MENSAJES, SITE, whatsappUrl } from '@/lib/site';
+import { EnlaceInicio } from './EnlaceInicio';
 import { IconoInstagram, IconoUbicacion, IconoWhatsApp } from './iconos';
 
 export function Footer() {
@@ -8,11 +9,19 @@ export function Footer() {
     <footer className="snap-start border-t border-border bg-[#f6ede3]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3 lg:px-8">
         <div>
-          <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} />
+          <EnlaceInicio aria-label="ECOS, ir al inicio" className="inline-block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+            <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} />
+          </EnlaceInicio>
           <p className="mt-4 font-heading text-base font-semibold italic text-primary-dark">{SITE.lema}.</p>
           <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Clases prácticas de manejo con instructores profesionales.
           </p>
+          <Link
+            href="/panel/login"
+            className="mt-4 inline-block text-sm font-semibold text-primary-dark underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            Acceso
+          </Link>
         </div>
 
         <div>
@@ -72,11 +81,8 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-2 border-t border-border py-6 text-center text-xs text-muted-foreground">
-        <p>© {SITE.nombreCompleto}. Todos los derechos reservados.</p>
-        <Link href="/panel/login" className="underline-offset-2 hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-          Acceso
-        </Link>
+      <div className="border-t border-border py-6 text-center text-xs text-muted-foreground">
+        © {SITE.nombreCompleto}. Todos los derechos reservados.
       </div>
     </footer>
   );

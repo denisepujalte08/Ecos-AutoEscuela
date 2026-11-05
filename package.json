@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "demo:cargar": "node --env-file=.env.local scripts/cargar-demo.mjs",
     "personal:crear": "node --env-file=.env.local scripts/crear-personal.mjs",
     "db:start": "supabase start",
     "db:stop": "supabase stop",

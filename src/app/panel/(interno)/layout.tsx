@@ -22,14 +22,18 @@ export default function PanelLayout({ children }: { children: ReactNode }) {
 async function Marco({ children }: { children: ReactNode }) {
   const personal = await exigirPersonal();
   return (
-    <div className="min-h-screen" style={{ background: 'var(--fondo-cursos)' }}>
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <div className="panel-raiz min-h-screen" style={{ background: 'var(--fondo-cursos)' }}>
+      {/* Barra flotante igual a la de la web y a la del login. */}
+      <header className="animate-barra fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-2xl border border-border/60 bg-background/95 px-4 shadow-xl backdrop-blur-lg lg:px-8">
           <div className="flex items-center gap-6">
             <Link href="/panel" aria-label="Inicio del panel">
-              <Image src="/logo-ecos-solo.svg" alt="ECOS" width={104} height={31} loading="eager" className="h-auto w-24" />
+              <Image src="/logo-ecos-solo.svg" alt="ECOS" width={147} height={44} loading="eager" className="h-auto w-[8.5rem]" />
             </Link>
-            <nav aria-label="Panel" className="text-sm font-semibold">
+            <nav aria-label="Panel" className="flex gap-5 text-sm font-semibold">
+              <Link href="/panel/calendario" className="hover:text-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                Calendario
+              </Link>
               <Link href="/panel/pedidos" className="hover:text-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 Pedidos
               </Link>
@@ -50,7 +54,7 @@ async function Marco({ children }: { children: ReactNode }) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+      <main className="mx-auto max-w-6xl px-4 pb-10 pt-24">{children}</main>
     </div>
   );
 }

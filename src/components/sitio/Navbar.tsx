@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { ENLACES, MENSAJES, whatsappUrl } from '@/lib/site';
 import { Boton } from './Boton';
+import { EnlaceInicio } from './EnlaceInicio';
 import { IconoCerrar, IconoMenu } from './iconos';
 
 export function Navbar() {
@@ -48,14 +49,19 @@ export function Navbar() {
         setActivo(actual);
       });
     };
+    // También se calcula al cargar y al cambiar el `#` de la dirección (no solo al hacer scroll): así el
+    // indicador nunca se queda con la sección de antes, por ejemplo al volver desde el login.
+    alMover();
     window.addEventListener('scroll', alMover, { passive: true });
     window.addEventListener('resize', alMover);
+    window.addEventListener('hashchange', alMover);
     return () => {
       cancelAnimationFrame(cuadro);
       window.removeEventListener('scroll', alMover);
       window.removeEventListener('resize', alMover);
+      window.removeEventListener('hashchange', alMover);
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <>
@@ -81,9 +87,15 @@ export function Navbar() {
               flotante ? 'h-14' : 'h-16'
             }`}
           >
-            <Link href="/" aria-label="ECOS, ir al inicio" onClick={() => setAbierto(false)}>
+            <EnlaceInicio
+              aria-label="ECOS, ir al inicio"
+              onClick={() => {
+                setAbierto(false);
+                setActivo(ENLACES[0].id);
+              }}
+            >
               <Image src="/logo-ecos-solo.svg" alt="ECOS Escuela de Conducción Segura" width={147} height={44} priority />
-            </Link>
+            </EnlaceInicio>
 
             <ul className="hidden items-center gap-1 lg:flex">
               {ENLACES.map((e) => (
