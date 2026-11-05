@@ -23,10 +23,17 @@ pending_review ──confirm_payment──▶ active ──schedule_enrollment�
 |---|---|
 | `create_web_purchase`, `confirm_payment`, `schedule_enrollment` + tests de base | ✅ (`supabase/migrations/20261105000006_compra_web.sql`) |
 | `comprarCursoDesdeWeb`, `confirmarPago`, `agendarClases`, `getActiveCourses` | ✅ (`src/lib/booking/compra.ts`, `courses.ts`) |
-| Pantalla "Comprar curso" → WhatsApp | PR siguiente |
+| Pantalla "Comprar curso" (`/comprar`) → WhatsApp | ✅ (`src/app/(sitio)/comprar/`, `src/lib/booking/pedido.ts`) |
 | Panel del personal: pedidos pendientes, confirmar pago, dar de alta al alumno | PR siguiente |
 | Panel del alumno: login, completar ficha, elegir y reprogramar turnos | PR siguiente |
 | Mail automático al confirmar el pago | con el panel del personal (necesita un servicio de mails) |
+
+## Pantalla `/comprar`
+
+- Elegir curso (`?clases=N` lo preselecciona; las tarjetas de la landing lo usan), efectivo o transferencia, y dejar nombre, teléfono, DNI y email. El total se muestra en vivo, pero **el monto que vale lo calcula la base** (`calcularMonto` solo replica la cuenta para mostrarla).
+- Al terminar muestra un código de pedido (los primeros 8 caracteres del id) y un botón de WhatsApp con el resumen (`MENSAJES.pedido`).
+- La Server Action (`actions.ts`) solo lee el formulario; todo lo demás está en `procesarPedido`, que valida con Zod aunque la acción se llame directo. Un campo trampa (`sitio_web`) frena robots simples. Los errores inesperados se registran en el servidor y la persona ve un mensaje genérico.
+- Los descuentos y cursos se leen de la base (`getDescuentos`, `getActiveCourses`).
 
 ## Decisiones
 
@@ -36,7 +43,7 @@ pending_review ──confirm_payment──▶ active ──schedule_enrollment�
 - **El DNI identifica al alumno.** Si ya existe se reutiliza y **no se pisan sus datos** desde la web (cualquiera podría escribir un DNI ajeno): el personal los corrige desde el panel.
 - **El monto nunca viene del navegador**: lo calcula la base.
 - **Las tres funciones solo las ejecuta `service_role`** (el servidor). `confirmarPago` y `agendarClases` no verifican quién las llama: el código que las use (Server Actions del panel) debe comprobar antes el rol o que la inscripción sea de esa persona.
-- **Curso de 10 clases:** inactivo hasta que el cliente pase el precio.
+- **Curso de 10 clases:** precio SUPUESTO de $350.000 (provisorio, pregunta 1 pendiente). Está activo y se puede comprar. Cuando el cliente pase el precio real: cambiar `supabase/seed.sql`, `src/lib/cursos.ts` y el precio en la base de producción.
 
 ## Supuestos y pendientes del cliente
 

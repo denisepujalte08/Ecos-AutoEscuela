@@ -23,7 +23,7 @@
 3. **Avisar a Denise antes de empezar el front:** tiene una plantilla elegida.
 4. **Cliente de Supabase en Next.js** (servidor y navegador) y tipos generados.
 3. **Compra desde la web** (pagar primero, elegir turnos después; ver `docs/08-compra-web.md`), en PRs chicos:
-   1. Pantalla "Comprar curso" → WhatsApp.
+   1. ~~Pantalla "Comprar curso" → WhatsApp~~ (hecho).
    2. Panel del personal: login, pedidos pendientes, confirmar pago, dar de alta al alumno con aviso por mail.
    3. Panel del alumno: login, completar ficha, elegir turnos y reprogramarlos.
 4. **Mercado Pago:** ~~orden y webhook~~ (hecho con la API de Orders); falta probarlo con credenciales de prueba y armar la página de retorno `/reserva/resultado`.

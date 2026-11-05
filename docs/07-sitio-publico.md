@@ -39,7 +39,7 @@ Por pedido del cliente, **todos los botones de reserva llevan a WhatsApp** con u
 
 ## Supuestos (a confirmar con el cliente)
 
-- **Precios en pantalla:** hoy están escritos a mano en `src/lib/cursos.ts` (los del cartel: 5 clases $165.000, 7 clases $230.000). Es una duplicación temporal: el PR de reservas los va a leer de la tabla `courses` (`precio_lista`). El curso de 10 clases no se muestra hasta conocer su precio.
+- **Precios en pantalla:** hoy están escritos a mano en `src/lib/cursos.ts` (los del cartel: 5 clases $165.000, 7 clases $230.000). Es una duplicación temporal: el PR de reservas los va a leer de la tabla `courses` (`precio_lista`). El curso de 10 clases usa un precio supuesto de $350.000 hasta conocer el real.
 - **Descuentos:** el sitio no menciona descuentos ni formas de pago hasta que el cliente defina las reglas (ver `03-preguntas-pendientes.md`).
 - **Examen:** el sitio ya no aclara que el costo del examen no está incluido (respuesta 24 del cliente); el curso de 10 clases dice que se acompaña a rendir el examen práctico en la clase 10. Confirmar con el cliente si hace falta aclarar el costo.
 - **Textos:** los escribió el equipo de desarrollo con lo que se sabe de la escuela; el cliente debe revisarlos.

@@ -11,8 +11,8 @@ select 'a0000000-0000-0000-0000-00000000000a'::uuid, d, '08:00'::time, '13:00'::
 union all
 select 'b0000000-0000-0000-0000-00000000000b'::uuid, d, '14:00'::time, '19:00'::time from generate_series(1, 5) d;
 
--- Precios de lista (cartel). El curso de 10 clases queda inactivo hasta conocer su precio (pregunta 1).
+-- Precios de lista (cartel). El de 10 clases es SUPUESTO ($350.000, a modo de ejemplo) hasta que el cliente pase el precio real (pregunta 1).
 insert into courses (nombre, cantidad_clases, precio_lista, incluye_examen, activo) values
   ('Curso de 5 clases',  5, 165000, false, true),
   ('Curso de 7 clases',  7, 230000, false, true),
-  ('Curso de 10 clases', 10, 0,      true,  false);
+  ('Curso de 10 clases', 10, 350000, true,  true);
